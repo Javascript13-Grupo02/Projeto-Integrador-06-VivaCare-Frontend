@@ -19,15 +19,14 @@ function ListaApolices() {
     const token = usuario.token
 
     useEffect(() => {
+        
         if (token === '') {
             ToastAlerta('Você precisa estar logado!', 'info')
             navigate('/')
+            return
         }
+        buscarApolices()
     }, [token])
-
-    useEffect(() => {
-        buscarApolices()    
-    }, [apolices.length])
 
     async function buscarApolices() {
         try {
@@ -37,7 +36,8 @@ function ListaApolices() {
             await buscar('/apolices', setApolices, {
                 headers: { Authorization: token }
             })
-        } catch (error: any) {
+        
+        }catch (error: any) {
             if (error.toString().includes('401')) {
                 handleLogout()
             }
@@ -68,7 +68,7 @@ function ListaApolices() {
                     )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 
-                                    lg:grid-cols-3 gap-8">
+                                    lg:grid-cols-3 gap-2">
                             {
                                 apolices.map((apolice) => (
                                     <CardApolice key={apolice.id} apolice={apolice}/>

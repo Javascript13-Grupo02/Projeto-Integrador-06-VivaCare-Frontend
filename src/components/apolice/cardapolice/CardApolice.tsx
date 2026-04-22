@@ -16,7 +16,7 @@ function CardApolice({ apolice }: CardApoliceProps) {
       {/* CORPO DO CARD */}
       <div className="px-8 py-7 flex-1 flex flex-col gap-6">
         <div>
-            <h1 className="text-sky-800 text-base font-semibold uppercase tracking-wider leading-snug">
+            <h1 className="text-sky-800 text-base font-semibold uppercase tracking-wider leading-tight">
             {apolice.cliente.nome}
             </h1>
             <p className="text-black text-sm font-medium leading-1">cliente</p>
@@ -31,30 +31,31 @@ function CardApolice({ apolice }: CardApoliceProps) {
                 <p>Data de Início:</p>
                 <p>Data de Fim:</p>
                 <p>Corretor:</p>
+                <p className="font-semibold mt-5">Preço:</p>
             </div>
 
             <div className="flex flex-col ml-5 text-black font-medium">
                 <p>{apolice.plano}</p>
                 <p>{apolice.dependentes}</p>
                 <p>{new Intl.DateTimeFormat("pt-BR", {
-                        dateStyle: 'medium',
+                        dateStyle: 'short',
                     }).format(new Date(apolice.data_inicio))}</p>
 
                 <p >{new Intl.DateTimeFormat("pt-BR", {
-                        dateStyle: 'medium',
+                        dateStyle: 'short',
                     }).format(new Date(apolice.data_fim))}</p>
                 <p>{apolice.usuario.nome}</p>
-            </div>
-            <div>
-              <h4 className="text-sky-800 text-base font-medium">
-                Preço:
-              </h4>
-              <h4 className="flex flex-col ml-5">
+                
+                <p className="font-semibold mt-5">
                 {new Intl.NumberFormat("pt-BR", {
                         style: 'currency',
                         currency: 'BRL'
                     }).format(apolice.preco)} 
-              </h4>
+              </p>
+            </div>
+            <div >
+              
+              
             </div>
 
            
