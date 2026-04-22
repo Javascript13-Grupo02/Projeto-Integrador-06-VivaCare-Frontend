@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
-import FormContato from "../../components/form/Form"
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
+import FormContato from "../../components/formcontato/FormContato";
 
 
 function Home() {

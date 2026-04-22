@@ -27,7 +27,7 @@ function FormContato() {
   return (
 
     // Conteiner externo
-    <div className="flex items-center justify-center pb-4 bg-linear-to-br from-white to-[#e7f5ff]">
+    <div className="flex items-center justify-center pb-4">
 
         <div className="flex flex-col justify-center rounded-2xl bg-gray-200 text-slate-800
                                 w-240 min-h-150 my-4 mx-4 px-8 py-8 shadow-2xl transition-all">
