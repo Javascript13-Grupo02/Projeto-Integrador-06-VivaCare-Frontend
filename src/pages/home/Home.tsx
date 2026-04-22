@@ -1,32 +1,22 @@
 import { Link } from "react-router-dom"
 import FormContato from "../../components/form/Form"
+import { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
 
 
 function Home() {
-  return (
-    <>
-      <section className="bg-white flex flex-col items-center justify-center pt-8 bg-[url('https://images.unsplash.com/photo-1506836467174-27f1042aa48c')] bg-cover bg-center relative h-dvh">
-        <div className="absolute inset-0 bg-sky-950/50">
-        </div>
-        <div className="z-10 flex flex-col items-center justify-center gap-4">
-          <h1 className="text-3xl md:text-5xl font-bold text-white text-center m-2">VivaCare</h1>
-          <p className="text-2xl md:text-3xl font-medium leading-snug text-white text-center m-2">Mais que cuidado, uma parceria de vida</p>
-          <Link
-            to="/apolices"
-            className="bg-sky-800 hover:bg-sky-700 text-white text-lg font-semibold px-8 py-3 rounded-full transition-colors duration-300"
-          >
-            Conheça nossas apólices
-          </Link>
-        </div>
-      </section>
 
-      <div className="min-h-screen flex flex-col items-center py-16 px-4 bg-linear-to-br from-white to-sky-200">
+    const {usuario} = useContext(AuthContext);
 
+    let acessoRapido;
+
+    if(usuario.token !== ''){
+      acessoRapido = (
+        <>
         <div className="flex items-center gap-3 mb-8 sm:mb-12">
-          <h2 className="text-2xl sm:text-4xl font-bold text-slate-950">Acesso Rápido</h2>
+          <h2 className="text-2xl sm:text-2xl font-bold text-slate-950">Bem-vindo, {usuario.nome}!</h2>
         </div>
 
-        {/* Fazer lógica para os cards só aparecerem quando estiver logado */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-5xl">
 
           <Link
@@ -74,6 +64,33 @@ function Home() {
           </Link>
 
         </div>
+        </>
+      )
+    }
+
+  return (
+    <>
+      <section className="bg-white flex flex-col items-center justify-center pt-8 bg-[url('https://images.unsplash.com/photo-1506836467174-27f1042aa48c')] bg-cover bg-center relative h-dvh">
+        <div className="absolute inset-0 bg-sky-950/50">
+        </div>
+        <div className="z-10 flex flex-col items-center justify-center gap-4">
+          <h1 className="text-3xl md:text-5xl font-bold text-white text-center m-2">VivaCare</h1>
+          <p className="text-2xl md:text-3xl font-medium leading-snug text-white text-center m-2">Mais que cuidado, uma parceria de vida</p>
+          <Link
+            to="/apolices"
+            className="bg-sky-800 hover:bg-sky-700 text-white text-lg font-semibold px-8 py-3 rounded-full transition-colors duration-300"
+          >
+            Conheça nossas apólices
+          </Link>
+        </div>
+      </section>
+
+      <div className="min-h-screen flex flex-col items-center py-16 px-4 bg-linear-to-br from-white to-sky-200">
+
+
+        {/* Fazer lógica para os cards só aparecerem quando estiver logado */}
+        {acessoRapido}
+
 
         <div className="w-full max-w-5xl mt-12">
           <FormContato />
