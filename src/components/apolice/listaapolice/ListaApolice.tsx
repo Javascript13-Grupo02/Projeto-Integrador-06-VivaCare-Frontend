@@ -9,7 +9,7 @@ import CardApolice from "../cardapolice/CardApolice";
 
 function ListaApolices() {
 
-    const navigate = useNavigate();
+     const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
@@ -19,16 +19,17 @@ function ListaApolices() {
     const token = usuario.token
 
     useEffect(() => {
-        
         if (token === '') {
             ToastAlerta('Você precisa estar logado!', 'info')
             navigate('/')
-            return
         }
-        buscarApolices()
     }, [token])
 
-    async function buscarApolices() {
+    useEffect(() => {
+        buscarPostagens()    
+    }, [apolices.length])
+
+    async function buscarPostagens() {
         try {
 
             setIsLoading(true)
@@ -36,8 +37,7 @@ function ListaApolices() {
             await buscar('/apolices', setApolices, {
                 headers: { Authorization: token }
             })
-        
-        }catch (error: any) {
+        } catch (error: any) {
             if (error.toString().includes('401')) {
                 handleLogout()
             }
