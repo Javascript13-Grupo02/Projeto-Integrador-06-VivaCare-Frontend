@@ -1,69 +1,132 @@
-// Importa o React e o hook useState para gerenciar estados locais
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { buscar, deletar } from "../../../services/Service";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
+import { ClipLoader } from "react-spinners";
+import type Cliente from "../../../models/Cliente";
 
-import { useState, type SyntheticEvent } from "react";
+function DeletarCliente() {
+  const navigate = useNavigate();
 
+  const { id } = useParams<{ id: string }>();
 
+  const { usuario, handleLogout } = useContext(AuthContext);
+  const token = usuario?.token;
 
-// Componente funcional para deletar um cliente pelo ID
-export default function DeletarCliente() {
-	// Estado para armazenar o ID do cliente a ser deletado
-	const [id, setId] = useState("");
-	// Estado para mensagem de sucesso
-	const [mensagem, setMensagem] = useState("");
-	// Estado para mensagem de erro
-	const [erro, setErro] = useState("");
-	// Estado para indicar carregamento
-	const [loading, setLoading] = useState(false);
+  const [cliente, setCliente] = useState<Cliente>({} as Cliente);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
+  // 1. Segurança: Se não estiver logado, manda para o login
+  useEffect(() => {
+    if (token === "") {
+      ToastAlerta("Você precisa estar logado para apagar um cliente", "info");
+      navigate("/login");
+    }
+  }, [token]);
 
-		// Função para lidar com o envio do formulário e deletar o cliente
-		async function handleDelete(e: SyntheticEvent) {
-			e.preventDefault(); // Evita o recarregamento da página
-			setMensagem(""); // Limpa mensagens anteriores
-			setErro("");
-			setLoading(true); // Indica carregamento
-			try {
-				// Faz a requisição DELETE para a API
-				const resp = await fetch(`https://vivacare.onrender.com/clientes/${id}`, {
-					method: "DELETE",
-				});
-				if (!resp.ok) throw new Error("Erro ao deletar cliente");
-				setMensagem("Cliente deletado com sucesso!"); // Sucesso
-				setId(""); // Limpa o campo ID
-			} catch (e: any) {
-				setErro(e.message || "Erro desconhecido"); // Exibe erro
-			} finally {
-				setLoading(false); // Finaliza carregamento
-			}
-		}
+  // 2. Busca os dados do cliente assim que a tela abre para mostrar no card
+  useEffect(() => {
+    if (id !== undefined) {
+      buscarClientePorId(id);
+    }
+  }, [id]);
 
-		return (
-			// Formulário centralizado para deletar cliente
-			<form onSubmit={handleDelete} className="max-w-md mx-auto bg-white p-8 rounded-xl shadow flex flex-col gap-4 mt-8">
-				{/* Título do formulário */}
-				<h2 className="text-xl font-bold text-red-700 mb-2">Deletar Cliente</h2>
-				{/* Campo para digitar o ID do cliente */}
-				<input
-					type="number"
-					name="id"
-					placeholder="ID do cliente"
-					value={id}
-					onChange={e => setId(e.target.value)}
-					required
-					className="border p-2 rounded"
-				/>
-				{/* Botão de submit, desabilitado durante carregamento */}
-				<button
-					type="submit"
-					disabled={loading}
-					className="bg-red-700 text-white rounded p-2 font-bold hover:bg-red-800"
-				>
-					{loading ? "Deletando..." : "Deletar"}
-				</button>
-				{/* Mensagem de sucesso */}
-				{mensagem && <div className="text-green-600 font-semibold">{mensagem}</div>}
-				{/* Mensagem de erro */}
-				{erro && <div className="text-red-600 font-semibold">{erro}</div>}
-			</form>
-		);
+  async function buscarClientePorId(id: string) {
+    try {
+      await buscar(`/clientes/${id}`, setCliente, {
+        headers: { Authorization: token },
+      });
+    } catch (error: any) {
+      if (error.toString().includes("401")) {
+        handleLogout();
+      }
+      ToastAlerta("Cliente não encontrado!", "erro");
+      retornar();
+    }
+  }
+
+  // 3. Função que executa o DELETE no NestJS ao clicar no botão "Sim"
+  async function deletarCliente() {
+    setIsLoading(true);
+
+    try {
+      await deletar(`/clientes/${id}`, {
+        headers: { Authorization: token },
+      });
+      ToastAlerta("Cliente apagado com sucesso!", "sucesso");
+      retornar(); // Volta pra lista de clientes
+    } catch (error: any) {
+      if (error.toString().includes("401")) {
+        handleLogout();
+      } else {
+        ToastAlerta("Erro ao apagar o cliente.", "erro");
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function retornar() {
+    navigate("/clientes");
+  }
+
+  return (
+    <div className="container w-1/3 mx-auto mt-10">
+      <h1 className="text-4xl text-center font-bold text-sky-800 my-4">
+        Deletar Cliente
+      </h1>
+      <p className="text-center font-semibold mb-6 text-slate-600">
+        Você tem certeza de que deseja apagar o cliente a seguir?
+      </p>
+
+      {/* Card de Resumo do Cliente a ser deletado */}
+      <div className="border flex flex-col rounded-2xl overflow-hidden justify-between bg-white shadow-lg">
+        <header className="py-4 px-6 bg-sky-800 text-white font-bold text-2xl">
+          Cliente
+        </header>
+
+        <div className="p-6 flex items-center gap-4">
+          <img
+            src={
+              cliente.foto && cliente.foto !== "string"
+                ? cliente.foto
+                : "https://ik.imagekit.io/y22k2h6x5/default-avatar.png"
+            }
+            alt="Foto do Cliente"
+            className="w-16 h-16 rounded-full border-2 border-sky-800 object-cover"
+          />
+          <div>
+            <p className="text-xl h-full font-bold text-sky-900 uppercase">
+              {cliente.nome}
+            </p>
+            <p className="text-slate-600">{cliente.email}</p>
+          </div>
+        </div>
+
+        {/* Botões de Ação */}
+        <div className="flex bg-slate-100">
+          <button
+            className="text-slate-100 bg-red-500 hover:bg-red-700 w-full py-4 font-bold transition-colors"
+            onClick={retornar}
+          >
+            Não, Cancelar
+          </button>
+
+          <button
+            className="text-slate-100 bg-sky-800 hover:bg-sky-900 w-full py-4 font-bold flex items-center justify-center transition-colors"
+            onClick={deletarCliente}
+          >
+            {isLoading ? (
+              <ClipLoader color="#ffffff" size={24} />
+            ) : (
+              <span>Sim, Deletar</span>
+            )}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
+
+export default DeletarCliente;

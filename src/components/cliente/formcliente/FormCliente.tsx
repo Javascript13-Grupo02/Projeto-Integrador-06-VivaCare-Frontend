@@ -1,149 +1,245 @@
-import React, { useState, type SyntheticEvent } from "react";
+import {
+  type ChangeEvent,
+  type SyntheticEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
+import { AuthContext } from "../../../contexts/AuthContext";
 import type Cliente from "../../../models/Cliente";
-import { podeCadastrar } from "../../../models/Cliente";
-import { AtIcon, CalendarIcon, CameraIcon, UserIcon } from "@phosphor-icons/react";
+import { atualizar, buscar, cadastrar } from "../../../services/Service";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
+import { podeCadastrar } from "../../../utils/ChecagemIdade";
 
+function FormCliente() {
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { id } = useParams<{ id: string }>();
 
+  const { usuario, handleLogout } = useContext(AuthContext);
+  const token = usuario?.token || "";
 
-export default function FormCliente() {
-	const [form, setForm] = useState<Omit<Cliente, "id" | "apolices">>({
-		nome: "",
-		email: "",
-		data_nascimento: "",
-		foto: ""
-	});
-	const [mensagem, setMensagem] = useState("");
-	const [erro, setErro] = useState("");
-	const [loading, setLoading] = useState(false);
+  // Inicializa o estado do cliente
+  const [cliente, setCliente] = useState<Cliente>({
+    id: 0,
+    nome: "",
+    email: "",
+    telefone: "",
+    data_nascimento: "",
+    foto: "",
+  } as Cliente);
 
-	function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-		setForm({ ...form, [e.target.name]: e.target.value });
-	}
+  // Busca os dados do cliente para edição caso exista um ID na URL
+  async function buscarClientePorId(id: string) {
+    try {
+      await buscar(`/clientes/${id}`, setCliente, {
+        headers: { Authorization: token },
+      });
+    } catch (error: any) {
+      if (error.toString().includes("401")) {
+        handleLogout();
+      }
+    }
+  }
 
-	async function handleSubmit(e: SyntheticEvent) {
-		e.preventDefault();
-		setMensagem("");
-		setErro("");
+  // Proteção de rota
+  useEffect(() => {
+    if (token === "") {
+      ToastAlerta("Você precisa estar logado", "info");
+      navigate("/login");
+    }
+  }, [token]);
 
+  // Dispara a busca se o componente for aberto no modo "Editar"
+  useEffect(() => {
+    if (id !== undefined) {
+      buscarClientePorId(id);
+    }
+  }, [id]);
 
-		// Validação nome
-		if (!form.nome.trim()) {
-			setErro("<strong>Preencha o nome.</strong>");
-			return;
-		}
+  // Atualiza os campos dinamicamente conforme o usuário digita
+  function atualizarEstado(e: ChangeEvent<HTMLInputElement>) {
+    setCliente({
+      ...cliente,
+      [e.target.name]: e.target.value,
+    });
+  }
 
-		// Validação maioridade
-		const clienteFake: Cliente = { ...form, id: 0, apolices: [] };
-		if (!podeCadastrar(clienteFake)) {
-			setErro("<strong>Cadastro não permitido:</strong> é necessário ter 18 anos ou mais para contratar uma apólice.");
-			return;
-		}
+  function retornar() {
+    navigate("/clientes");
+  }
 
-		setLoading(true);
-		try {
-			const payload = { ...form };
-			const resp = await fetch("https://vivacare.onrender.com/clientes", {
-				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify(payload)
-			});
-			if (!resp.ok) throw new Error("Erro ao cadastrar cliente");
-			setMensagem("Cliente cadastrado com sucesso!");
-			setForm({ nome: "", email: "", data_nascimento: "", foto: "" });
-		} catch (e: any) {
-			setErro(e.message || "Erro desconhecido");
-		} finally {
-			setLoading(false);
-		}
-	}
+  // Função principal que decide se vai cadastrar ou atualizar no NestJS
+  async function gerarNovoCliente(e: SyntheticEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-	return (
-		<div className="flex items-center justify-center pb-4 min-h-screen bg-linear-to-br from-white to-sky-200">
-			<div className="flex flex-col justify-center rounded-2xl bg-sky-800 text-slate-100 w-240 min-h-150 my-4 mx-4 px-8 py-8 shadow-2xl transition-all">
-				<form onSubmit={handleSubmit} className="flex flex-col columns-1 justify-start gap-4 mt-3 mb-8 mx-8 w-full">
-					<h2 className="font-bold text-3xl mt-8 mb-12 text-slate-100">Cadastrar Cliente</h2>
+    // 1. VALIDAÇÃO DE E-MAIL
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(cliente.email)) {
+      ToastAlerta("Por favor, insira um endereço de e-mail válido.", "erro");
+      return;
+    }
 
-					{/* Nome */}
-					<div className="flex flex-col gap-1.5">
-						<div className="flex flex-row items-center gap-0.5">
-							<UserIcon size={20} color="#f1f5f9" weight="bold" />
-							<label htmlFor="nome" className="font-bold text-slate-100">Nome</label>
-						</div>
-						<input
-							type="text"
-							placeholder="Digite o seu nome"
-							id="nome"
-							name="nome"
-							required
-							value={form.nome}
-							onChange={handleChange}
-							className="border-2 rounded-xl py-2 px-4 w-6/10 bg-white text-black focus:outline-none"
-						/>
-					</div>
+    // 2. VALIDAÇÃO DE TELEFONE (Modo Estrito do seu NestJS)
+    const telefoneRegex = /^\+55\d{11}$/;
+    if (!telefoneRegex.test(cliente.telefone)) {
+      ToastAlerta(
+        "Telefone inválido! Use o formato : +55 seguido do DDD e do número (Ex: +5521999999999).",
+        "erro",
+      );
+      return;
+    }
 
-					{/* Email */}
-					<div className="flex flex-col gap-1.5">
-						<div className="flex flex-row items-end gap-0.5">
-							<AtIcon size={20} color="#f1f5f9" weight="bold" />
-							<label htmlFor="email" className="font-bold text-slate-100">E-mail</label>
-						</div>
-						<input
-							type="email"
-							placeholder="example@example.com"
-							id="email"
-							name="email"
-							required
-							value={form.email}
-							onChange={handleChange}
-							className="border-2 rounded-xl py-2 px-4 w-7/10 bg-white text-black focus:outline-none"
-						/>
-					</div>
+    // 3. VALIDAÇÃO DE IDADE
+    if (!podeCadastrar(cliente)) {
+      ToastAlerta(
+        "O cliente precisa ter pelo menos 18 anos para ser cadastrado.",
+        "erro",
+      );
+      return;
+    }
+    setIsLoading(true);
 
-					{/* Data de nascimento */}
-					<div className="flex flex-col gap-1.5">
-						<div className="flex flex-row items-end gap-0.5">
-							<CalendarIcon size={20} color="#f1f5f9" weight="bold" />
-							<label htmlFor="data_nascimento" className="font-bold text-slate-100">Data de nascimento</label>
-						</div>
-						<input
-							type="date"
-							id="data_nascimento"
-							name="data_nascimento"
-							required
-							value={form.data_nascimento}
-							onChange={handleChange}
-							className="border-2 rounded-xl py-2 px-4 w-7/10 bg-white text-black focus:outline-none"
-						/>
-					</div>
+    if (id !== undefined) {
+      try {
+        await atualizar(`/clientes`, cliente, setCliente, {
+          headers: { Authorization: token },
+        });
+        ToastAlerta("Cliente atualizado com sucesso", "sucesso");
+      } catch (error: any) {
+        if (error.toString().includes("401")) {
+          handleLogout();
+        } else {
+          ToastAlerta("Erro ao atualizar o Cliente", "erro");
+        }
+      }
+    } else {
+      try {
+        await cadastrar(`/clientes`, cliente, setCliente, {
+          headers: { Authorization: token },
+        });
+        ToastAlerta("Cliente cadastrado com sucesso", "sucesso");
+      } catch (error: any) {
+        if (error.toString().includes("401")) {
+          handleLogout();
+        } else {
+          ToastAlerta("Erro ao cadastrar o Cliente", "erro");
+        }
+      }
+    }
 
-					{/* Foto */}
-					<div className="flex flex-col gap-1.5">
-						<div className="flex flex-row items-end gap-0.5">
-							<CameraIcon size={20} color="#f1f5f9" weight="bold" />
-							<label htmlFor="foto" className="font-bold text-slate-100">Foto (opcional)</label>
-						</div>
-						<input
-							type="text"
-							id="foto"
-							name="foto"
-							placeholder="URL da foto (opcional)"
-							value={form.foto}
-							onChange={handleChange}
-							className="border-2 rounded-xl py-2 px-4 w-7/10 bg-white text-black focus:outline-none"
-						/>
-					</div>
+    setIsLoading(false);
+    retornar();
+  }
 
-					<button
-						type="submit"
-						disabled={loading}
-						className="flex justify-center items-center leading-1.5 mt-2.5 w-9/10 p-4 rounded-lg text-white font-bold text-md bg-slate-800 hover:bg-slate-500 inset-1"
-					>
-						{loading ? "Cadastrando..." : "Cadastrar"}
-					</button>
-					{mensagem && <div className="text-green-600 font-semibold">{mensagem}</div>}
-					{erro && <div className="text-slate-100 font-semibold" dangerouslySetInnerHTML={{ __html: erro }} />}
-				</form>
-			</div>
-		</div>
-	);
+  return (
+    <div className="container flex flex-col mx-auto items-center mt-10">
+      <h1 className="text-4xl text-center font-bold text-sky-800 my-8">
+        {id !== undefined ? "Editar Cliente" : "Cadastrar Cliente"}
+      </h1>
+
+      <form
+        className="flex flex-col w-full max-w-lg gap-4 bg-white p-8 rounded-2xl shadow-xl border border-sky-200"
+        onSubmit={gerarNovoCliente}
+      >
+        <div className="flex flex-col gap-2">
+          <label htmlFor="nome" className="font-semibold text-sky-900">
+            Nome do Cliente
+          </label>
+          <input
+            type="text"
+            placeholder="Nome completo"
+            name="nome"
+            required
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            value={cliente.nome}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="email" className="font-semibold text-sky-900">
+            E-mail
+          </label>
+          <input
+            type="email"
+            placeholder="email@exemplo.com"
+            name="email"
+            required
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            value={cliente.email}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="telefone" className="font-semibold text-sky-900">
+            Telefone
+          </label>
+          <input
+            type="text"
+            placeholder="+5521999999999"
+            name="telefone"
+            required
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            value={cliente.telefone}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="data_nascimento"
+            className="font-semibold text-sky-900"
+          >
+            Data de Nascimento
+          </label>
+          <input
+            type="date"
+            name="data_nascimento"
+            required
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            // O split('T')[0] evita bugs ao carregar datas do banco para dentro de um input type="date"
+            value={
+              cliente.data_nascimento
+                ? cliente.data_nascimento.split("T")[0]
+                : ""
+            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="foto" className="font-semibold text-sky-900">
+            URL da Foto (Opcional)
+          </label>
+          <input
+            type="text"
+            placeholder="Link da imagem do cliente"
+            name="foto"
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            value={cliente.foto}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold w-full py-3 mt-4 flex justify-center transition-colors"
+        >
+          {isLoading ? (
+            <ClipLoader color="#ffffff" size={24} />
+          ) : (
+            <span>
+              {id === undefined ? "Cadastrar Cliente" : "Atualizar Cliente"}
+            </span>
+          )}
+        </button>
+      </form>
+    </div>
+  );
 }
+
+export default FormCliente;

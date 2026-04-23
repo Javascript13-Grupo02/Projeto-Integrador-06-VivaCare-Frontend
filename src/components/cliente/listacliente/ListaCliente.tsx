@@ -1,55 +1,76 @@
-// Importa hooks do React e componentes/tipos necessários
-import { useEffect, useState } from "react";
-import CardCliente from "../cardcliente/CardCliente";
+import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { buscar } from "../../../services/Service";
+import { ToastAlerta } from "../../../utils/ToastAlerta";
+import { SyncLoader } from "react-spinners";
 import type Cliente from "../../../models/Cliente";
+import CardCliente from "../cardcliente/CardCliente";
 
+function ListaClientes() {
+  const navigate = useNavigate();
+  const [clientes, setClientes] = useState<Cliente[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-// Componente funcional para listar todos os clientes
-export default function ListaCliente() {
-	// Estado para armazenar a lista de clientes
-	const [clientes, setClientes] = useState<Cliente[]>([]);
-	// Estado para indicar carregamento
-	const [loading, setLoading] = useState(true);
-	// Estado para mensagem de erro
-	const [erro, setErro] = useState("");
+  const { usuario, handleLogout } = useContext(AuthContext);
+  const token = usuario.token;
 
+  // Segurança: se não tiver token, volta para o login
+  useEffect(() => {
+    if (token === "") {
+      ToastAlerta("Você precisa estar logado!", "info");
+      navigate("/login");
+    }
+  }, [token]);
 
-		// Busca os clientes na API ao montar o componente
-		useEffect(() => {
-			async function fetchClientes() {
-				try {
-					// Requisição GET para buscar clientes
-					const resp = await fetch("https://vivacare.onrender.com/clientes");
-					if (!resp.ok) throw new Error("Erro ao buscar clientes");
-					const data = await resp.json();
-					setClientes(data); // Atualiza o estado com os clientes recebidos
-				} catch (e: any) {
-					setErro(e.message || "Erro desconhecido"); // Exibe erro, se houver
-				} finally {
-					setLoading(false); // Finaliza carregamento
-				}
-			}
-			fetchClientes();
-		}, []);
+  // Busca os clientes assim que a tela carrega
+  useEffect(() => {
+    buscarClientes();
+  }, []);
 
+  async function buscarClientes() {
+    if (token === "") return;
 
-		// Exibe mensagem de carregamento ou erro, se necessário
-		if (loading) return <div>Carregando clientes...</div>;
-		if (erro) return <div className="text-red-600">{erro}</div>;
+    try {
+      setIsLoading(true);
+      await buscar("/clientes", setClientes, {
+        headers: { Authorization: token },
+      });
+    } catch (error: any) {
+      if (error.toString().includes("401")) {
+        handleLogout();
+      }
+      console.error("Erro ao carregar clientes:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
+  return (
+    <>
+      {isLoading && (
+        <div className="flex justify-center w-full my-8">
+          <SyncLoader color="#075985" size={25} />
+        </div>
+      )}
 
-		// Renderiza a lista de clientes usando o CardCliente
-		return (
-			<div className="flex flex-wrap gap-8 justify-center p-8">
-				{clientes.length > 0 ? (
-					// Para cada cliente, renderiza um card
-					clientes.map((cliente) => (
-						<CardCliente key={cliente.id} cliente={cliente} />
-					))
-				) : (
-					// Caso não haja clientes cadastrados
-					<div>Nenhum cliente encontrado.</div>
-				)}
-			</div>
-		);
+      <div className="flex justify-center w-full my-4">
+        <div className="container flex flex-col">
+          {!isLoading && clientes.length === 0 && (
+            <span className="text-2xl text-center my-8 text-sky-900">
+              Nenhum cliente encontrado no sistema VivaCare.
+            </span>
+          )}
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {clientes.map((cliente) => (
+              <CardCliente key={cliente.id} cliente={cliente} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
+  );
 }
+
+export default ListaClientes;
