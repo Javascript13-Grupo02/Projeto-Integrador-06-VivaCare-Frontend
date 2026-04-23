@@ -70,7 +70,7 @@ function Login() {
             />
           </div>
           <button type="submit"
-          className="rounded bg-indigo-400 flex justify-center hover:bg-indigo-900 text-white w-1/2 py-2"
+          className="rounded bg-sky-800 flex justify-center hover:bg-sky-950 text-white w-1/2 py-2"
           >
             {
 								isLoading ?
@@ -88,10 +88,10 @@ function Login() {
           </button>
           <hr className="border-slate-800 w-full"/>
           <p> Ainda não tem uma conta? {''}
-            <Link to="/cadastro" className="text-indigo-800 hover:underline">Cadastre-se</Link>
+            <Link to="/cadastro" className="text-sky-800 hover:underline">Cadastre-se</Link>
           </p>
         </form>
-        <div className="bg-[url('https://i.imgur.com/ZZFAmzo.jpg')] lg:block hidden bg-no-repeat w-full min-h-screen bg-cover bg-center"></div>
+        <div className="bg-[url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85')] lg:block hidden bg-no-repeat w-full min-h-screen bg-cover bg-center"></div>
       </div>
     </>
   )

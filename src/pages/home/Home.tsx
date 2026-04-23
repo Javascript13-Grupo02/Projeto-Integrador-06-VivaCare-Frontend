@@ -85,7 +85,7 @@ function Home() {
         </div>
       </section>
 
-      <div className="min-h-screen flex flex-col items-center py-16 px-4 bg-linear-to-br from-white to-sky-200">
+      <div className="min-h-screen flex flex-col items-center py-16 px-4 bg-linear-to-br from-white to-sky-100">
 
 
         {/* Fazer lógica para os cards só aparecerem quando estiver logado */}
