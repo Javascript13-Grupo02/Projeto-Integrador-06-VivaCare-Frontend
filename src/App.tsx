@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "./pages/login/Login";
 import { AuthProvider } from "./contexts/AuthContext";
 import ListaApolices from "./components/apolice/listaapolice/ListaApolice";
+import DeletarApolice from "./components/apolice/deletarapolice/DeletarApolice";
 
 function App() {
   return (
@@ -9,7 +10,9 @@ function App() {
     <AuthProvider>
       <Routes>
         <Route path="/" element={<Login/>}/>
-        <Route path="/listarapolices" element={<ListaApolices/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/apolices" element={<ListaApolices/>}/>
+        <Route path="/deletarapolice/:id" element={<DeletarApolice/>}/>
       </Routes>
     </AuthProvider>
     </BrowserRouter>

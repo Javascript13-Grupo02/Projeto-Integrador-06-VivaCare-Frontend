@@ -18,7 +18,14 @@ export const login = async (url: string, dados: Object, setDados: Function) => {
 
 // Consultar
 export const buscar = async (url: string, setDados: Function, header: Object) => {
-    const resposta = await api.get(url, header)
+    const resposta = await api.get(url, {
+        ...header,
+        headers: {
+            ...(header as any).headers,
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+        }
+    })
     setDados(resposta.data)
 }
 
@@ -36,5 +43,5 @@ export const atualizar = async (url: string, dados: Object, setDados: Function, 
 
 // Deletar
 export const deletar = async (url: string, header: Object) => {
-    await api.delete(url, header)
+    await api.delete(url, header) 
 }

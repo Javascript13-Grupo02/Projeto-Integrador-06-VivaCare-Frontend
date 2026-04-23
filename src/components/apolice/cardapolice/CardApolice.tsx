@@ -8,7 +8,7 @@ interface CardApoliceProps {
 function CardApolice({ apolice }: CardApoliceProps) {
   return (
     <div className="flex flex-col rounded-2xl overflow-hidden bg-gray-200 border border-sky-200 
-                    hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] transition-all duration-300 w-95 h-full mx-auto my-10">
+                    hover:-translate-y-1 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] transition-all duration-300 w-96 h-full mx-auto my-10">
       
       {/* LINHA DECORATIVA NO TOPO */}
       <div className="w-full h-1 bg-sky-800" />
@@ -19,10 +19,10 @@ function CardApolice({ apolice }: CardApoliceProps) {
             <h1 className="text-sky-800 text-base font-semibold uppercase tracking-wider leading-tight">
             {apolice.cliente.nome}
             </h1>
-            <p className="text-black text-sm font-medium leading-1">cliente</p>
+            <p className="text-black text-sm font-medium leading-none">cliente</p>
         </div>
 
-        <div className="flex flex-col columns-2 gap-3">
+        <div className="flex flex-col gap-3">
 
           <div className="flex text-sky-800 text-sm leading-relaxed font-normal">
             <div>
@@ -39,7 +39,7 @@ function CardApolice({ apolice }: CardApoliceProps) {
                 <p>{apolice.dependentes}</p>
                 <p>{new Intl.DateTimeFormat("pt-BR", {
                         dateStyle: 'short',
-                    }).format(new Date(apolice.data_inicio))}</p>
+                    }).format(new Date(apolice.data_inicio + "T00:00:00"))}</p>
 
                 <p >{new Intl.DateTimeFormat("pt-BR", {
                         dateStyle: 'short',

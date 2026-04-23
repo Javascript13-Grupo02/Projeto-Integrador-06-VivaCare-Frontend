@@ -19,7 +19,7 @@ function Login() {
 
   useEffect(() => {
     if(usuario.token && usuario.token !== ''){
-      navigate('/listarapolices')
+      navigate('/apolices')
     }
   }, [usuario])
 
