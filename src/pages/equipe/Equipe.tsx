@@ -13,7 +13,7 @@ function Equipe() {
     const renderMembro = (membro: typeof membros[0], index: number) => (
                 <div
                     key={index}
-                    className="rounded-2xl shadow-md shadow-black/80 p-4 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-md bg-sky-800"
+                    className="rounded-2xl shadow-md shadow-black/80 p-4 sm:p-8 flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full sm:w-md bg-linear-to-r from-sky-950 via-sky-900 to-sky-800"
                 >
             {/* Foto do membro em círculo */}
             <div className="w-40 h-40 sm:w-48 sm:h-48 rounded-full border-4 border-slate-100 overflow-hidden bg-orange-200 shrink-0 flex items-center justify-center">

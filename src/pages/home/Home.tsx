@@ -21,7 +21,7 @@ function Home() {
 
           <Link
             to="/apolices"
-            className="rounded-2xl shadow-md shadow-black/80 overflow-hidden bg-sky-800 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)] transition-all duration-300"
+            className="rounded-2xl shadow-md shadow-black/80 overflow-hidden bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)] transition-all duration-300"
           >
             <div className="w-full h-48 overflow-hidden">
               <img
@@ -43,7 +43,7 @@ function Home() {
 
           <Link
             to="/clientes"
-            className="rounded-2xl shadow-md shadow-black/80 overflow-hidden bg-sky-800 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)] transition-all duration-300"
+            className="rounded-2xl shadow-md shadow-black/80 overflow-hidden bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)] transition-all duration-300"
           >
             <div className="w-full h-48 overflow-hidden">
               <img
@@ -76,12 +76,10 @@ function Home() {
         <div className="z-10 flex flex-col items-center justify-center gap-4">
           <h1 className="text-3xl md:text-5xl font-bold text-white text-center m-2">VivaCare</h1>
           <p className="text-2xl md:text-3xl font-medium leading-snug text-white text-center m-2">Mais que cuidado, uma parceria de vida</p>
-          <Link
-            to="/apolices"
-            className="bg-sky-800 hover:bg-sky-700 text-white text-lg font-semibold px-8 py-3 rounded-full transition-colors duration-300"
-          >
-            Conheça nossas apólices
-          </Link>
+          <a href="#formContato"
+            className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 hover:bg-sky-700 text-white text-lg font-semibold px-8 py-3 rounded-full transition-colors duration-300">
+              Fale com um de nossos corretores
+          </a>
         </div>
       </section>
 

@@ -55,10 +55,11 @@ function Navbar() {
                 </Link>
 
                 <div className='flex gap-4'>
-                    <Link to='/apolice' className='hover:text-[#45a8f0] transition-colors'>Apólice</Link>
-                    <Link to='/cliente' className='hover:text-[#45a8f0] transition-colors'>Cliente</Link>
+                    <Link to='/apolices' className='hover:text-[#45a8f0] transition-colors'>Apólice</Link>
+                    <Link to='/clientes' className='hover:text-[#45a8f0] transition-colors'>Cliente</Link>
                     <Link to='/sobre' className='hover:text-[#45a8f0] transition-colors'>Sobre</Link>
                     <Link to='/equipe' className='hover:text-[#45a8f0] transition-colors'>Equipe</Link>
+                    <Link to='/perfil' className='hover:text-[#45a8f0] transition-colors'>Perfil</Link>
                     <Link to='' onClick={logout} className='hover:text-[#45a8f0] transition-colors'>Sair</Link>
                 </div>
             </div>

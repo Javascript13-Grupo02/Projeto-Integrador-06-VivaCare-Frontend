@@ -24,7 +24,7 @@ function Sobre() {
               className="w-64 md:w-80 h-auto drop-shadow-lg mb-8"
             />
 
-            <div className="bg-sky-800 p-10 md:p-14 rounded-3xl shadow-md shadow-black/80 text-center w-full mt-auto">
+            <div className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 p-10 md:p-14 rounded-3xl shadow-md shadow-black/80 text-center w-full mt-auto">
               <h3 className="text-3xl font-bold mb-6 text-slate-100">
                 Nossa Missão
               </h3>
@@ -38,7 +38,7 @@ function Sobre() {
           </div>
 
           <div className="flex flex-col w-full h-full">
-            <div className="bg-sky-800  p-10 md:p-14 rounded-3xl shadow-md shadow-black/80 mt-auto">
+            <div className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800  p-10 md:p-14 rounded-3xl shadow-md shadow-black/80 mt-auto">
               <h3 className="text-3xl font-bold mb-6  text-slate-100  text-center">
                 Funcionalidades do Projeto
               </h3>
