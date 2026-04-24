@@ -44,8 +44,8 @@ function Navbar() {
 
     componentLogin = ( 
         <div className='w-full flex justify-center py-4 bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-white'>
-            <div className="container flex justify-between text-lg mx-8">
-                <Link to='/home' className="text-2xl font-bold">
+            <div className="container flex justify-between text-base sm:text-lg mx-8">
+                <Link to='/home' className="text-xl sm:text-2xl font-bold">
                     <div className="flex gap-0.5 sm:gap-2">
                     <img
                         src="https://ik.imagekit.io/vjqejp2vh/VivaCare/Logo%20VivaCare%20Clara.png?updatedAt=1777032061555"
