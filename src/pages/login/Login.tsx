@@ -33,7 +33,7 @@ function Login() {
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1450101499163-c8848c66ca85')" }}
+      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1597524678053-5e6fef52d8a3')" }}
     >
       {/* Overlay azul escuro */}
       <div className="absolute inset-0 bg-sky-950/60" />

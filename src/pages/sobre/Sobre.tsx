@@ -18,7 +18,7 @@ function Sobre() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-stretch w-full">
           <div className="flex flex-col items-center w-full h-full">
             <img
-              src="https://ik.imagekit.io/vjqejp2vh/VivaCare/VivaCare%20Escura.png"
+              src="https://ik.imagekit.io/vjqejp2vh/VivaCare/Logo%20VivaCare%20Escura.png?updatedAt=1777032056085"
               alt="Logo VivaCare"
               className="w-64 md:w-80 h-auto drop-shadow-lg mb-8"
             />

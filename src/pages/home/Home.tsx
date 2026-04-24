@@ -70,7 +70,7 @@ function Home() {
 
   return (
     <>
-      <section className="bg-white flex flex-col items-center justify-center pt-8 bg-[url('https://images.unsplash.com/photo-1506836467174-27f1042aa48c')] bg-cover bg-center relative h-dvh">
+      <section className="bg-white flex flex-col items-center justify-center pt-8 bg-[url('https://images.unsplash.com/photo-1581579186913-45ac3e6efe93')] bg-cover bg-center relative h-dvh">
         <div className="absolute inset-0 bg-sky-950/50">
         </div>
         <div className="z-10 flex flex-col items-center justify-center gap-4">

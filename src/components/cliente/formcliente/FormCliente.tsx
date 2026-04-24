@@ -75,14 +75,30 @@ function FormCliente() {
       return;
     }
 
+    let telefoneFormatado = cliente.telefone.replace(/\D/g, "");
+
+    if (telefoneFormatado.length > 0 && !telefoneFormatado.startsWith("55")) {
+      telefoneFormatado = "55" + telefoneFormatado;
+    }
+
+    if (telefoneFormatado.length > 0) {
+      telefoneFormatado = "+" + telefoneFormatado;
+    }
+
     const telefoneRegex = /^\+55\d{11}$/;
-    if (!telefoneRegex.test(cliente.telefone)) {
+    if (!telefoneRegex.test(telefoneFormatado)) {
       ToastAlerta(
-        "Telefone inválido! Use o formato : +55 seguido do DDD e do número (Ex: +5521999999999).",
+        "Telefone inválido! Digite um número com DDD válido (Ex: 21999999999 ou (21) 99999-9999).",
         "erro",
       );
       return;
     }
+
+    // Prepara o objeto final que será enviado para o NestJS com o telefone limpo
+    const clienteProntoParaEnvio = {
+      ...cliente,
+      telefone: telefoneFormatado,
+    };
 
     if (!podeCadastrar(cliente)) {
       ToastAlerta(
@@ -95,7 +111,7 @@ function FormCliente() {
 
     if (id !== undefined) {
       try {
-        await atualizar(`/clientes`, cliente, setCliente, {
+        await atualizar(`/clientes`, clienteProntoParaEnvio, setCliente, {
           headers: { Authorization: token },
         });
         ToastAlerta("Cliente atualizado com sucesso", "sucesso");
@@ -108,7 +124,7 @@ function FormCliente() {
       }
     } else {
       try {
-        await cadastrar(`/clientes`, cliente, setCliente, {
+        await cadastrar(`/clientes`, clienteProntoParaEnvio, setCliente, {
           headers: { Authorization: token },
         });
         ToastAlerta("Cliente cadastrado com sucesso", "sucesso");
@@ -125,7 +141,8 @@ function FormCliente() {
     retornar();
   }
 
-  const inputClass = "border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 w-full";
+  const inputClass =
+    "border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 w-full";
 
   const formContent = (
     <>
@@ -138,47 +155,95 @@ function FormCliente() {
         onSubmit={gerarNovoCliente}
       >
         <div className="flex flex-col gap-2">
-          <label htmlFor="nome" className="font-semibold text-sky-900">Nome do Cliente</label>
-          <input type="text" placeholder="Nome completo" name="nome" required
-            className={inputClass} value={cliente.nome}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)} />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="font-semibold text-sky-900">E-mail</label>
-          <input type="email" placeholder="email@exemplo.com" name="email" required
-            className={inputClass} value={cliente.email}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)} />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label htmlFor="telefone" className="font-semibold text-sky-900">Telefone</label>
-          <input type="text" placeholder="+5521999999999" name="telefone" required
-            className={inputClass} value={cliente.telefone}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)} />
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <label htmlFor="data_nascimento" className="font-semibold text-sky-900">Data de Nascimento</label>
-          <input type="date" name="data_nascimento" required
+          <label htmlFor="nome" className="font-semibold text-sky-900">
+            Nome do Cliente
+          </label>
+          <input
+            type="text"
+            placeholder="Nome completo"
+            name="nome"
+            required
             className={inputClass}
-            value={cliente.data_nascimento ? cliente.data_nascimento.split("T")[0] : ""}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)} />
+            value={cliente.nome}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="foto" className="font-semibold text-sky-900">URL da Foto (Opcional)</label>
-          <input type="text" placeholder="Link da imagem do cliente" name="foto"
-            className={inputClass} value={cliente.foto}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)} />
+          <label htmlFor="email" className="font-semibold text-sky-900">
+            E-mail
+          </label>
+          <input
+            type="email"
+            placeholder="email@exemplo.com"
+            name="email"
+            required
+            className={inputClass}
+            value={cliente.email}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
         </div>
 
-        <button type="submit"
-          className="rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold w-full py-3 mt-4 flex justify-center transition-colors">
+        <div className="flex flex-col gap-2">
+          <label htmlFor="telefone" className="font-semibold text-sky-900">
+            Telefone
+          </label>
+          <input
+            type="text"
+            placeholder="(21) 99999-9999"
+            name="telefone"
+            required
+            className={inputClass}
+            value={cliente.telefone}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="data_nascimento"
+            className="font-semibold text-sky-900"
+          >
+            Data de Nascimento
+          </label>
+          <input
+            type="date"
+            name="data_nascimento"
+            required
+            className={inputClass}
+            value={
+              cliente.data_nascimento
+                ? cliente.data_nascimento.split("T")[0]
+                : ""
+            }
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label htmlFor="foto" className="font-semibold text-sky-900">
+            URL da Foto (Opcional)
+          </label>
+          <input
+            type="text"
+            placeholder="Link da imagem do cliente"
+            name="foto"
+            className={inputClass}
+            value={cliente.foto}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold w-full py-3 mt-4 flex justify-center transition-colors"
+        >
           {isLoading ? (
             <ClipLoader color="#ffffff" size={24} />
           ) : (
-            <span>{id === undefined ? "Cadastrar Cliente" : "Atualizar Cliente"}</span>
+            <span>
+              {id === undefined ? "Cadastrar Cliente" : "Atualizar Cliente"}
+            </span>
           )}
         </button>
       </form>

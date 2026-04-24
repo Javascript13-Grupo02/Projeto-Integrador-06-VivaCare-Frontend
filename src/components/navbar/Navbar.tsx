@@ -24,7 +24,7 @@ function Navbar() {
                 <Link to='/home' className="text-2xl font-bold">
                     <div className="flex gap-2">
                     <img
-                        src="https://ik.imagekit.io/vjqejp2vh/VivaCare/VivaCare%20Clara.png?updatedAt=1776860373140"
+                        src="https://ik.imagekit.io/vjqejp2vh/VivaCare/Logo%20VivaCare%20Clara.png?updatedAt=1777032061555"
                         alt=""
                        className="h-9 w-auto"
                     />
@@ -48,7 +48,7 @@ function Navbar() {
                 <Link to='/home' className="text-2xl font-bold">
                     <div className="flex gap-2">
                     <img
-                        src="https://ik.imagekit.io/vjqejp2vh/VivaCare/VivaCare%20Clara.png?updatedAt=1776860373140"
+                        src="https://ik.imagekit.io/vjqejp2vh/VivaCare/Logo%20VivaCare%20Clara.png?updatedAt=1777032061555"
                         alt=""
                        className="h-9 w-auto"
                     />
