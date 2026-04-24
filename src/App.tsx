@@ -15,6 +15,7 @@ import ListaClientes from "./components/cliente/listacliente/ListaCliente";
 import FormUsuario from "./pages/cadastro/Cadastro";
 import Perfil from "./pages/perfil/Perfil";
 import AtualizarPerfil from "./pages/perfil/AtualizarPerfil";
+import Footer from "./components/footer/Footer";
 
 // function FundoClaro({ children }: { children: React.ReactNode }) {
 //   return (
@@ -79,6 +80,7 @@ function App() {
         <Route path="/cadastrarcliente" element={<FormCliente/>}/>
         <Route path="/editarcliente/:id" element={<FundoListras><FormCliente /></FundoListras>}/>
       </Routes>
+      <Footer/>
     </AuthProvider>
     </BrowserRouter>
   )
