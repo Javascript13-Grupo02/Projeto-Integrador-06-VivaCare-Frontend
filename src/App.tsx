@@ -64,7 +64,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="/home" element={<Home />}/>
-        <Route path="/login" element={<FundoListras><Login /></FundoListras>}/>
+        <Route path="/login" element={<Login />}/>
         <Route path="/sobre" element={<FundoListras><Sobre /></FundoListras>}/>
         <Route path="/equipe" element={<FundoListras><Equipe /></FundoListras>}/>
         <Route path="/perfil" element={<FundoListras><Perfil /></FundoListras>}/>
