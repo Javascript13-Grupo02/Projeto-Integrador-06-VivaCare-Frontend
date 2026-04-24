@@ -77,13 +77,27 @@ function Home() {
           <h1 className="text-3xl md:text-5xl font-bold text-white text-center m-2">VivaCare</h1>
           <p className="text-2xl md:text-3xl font-medium leading-snug text-white text-center m-2">Mais que cuidado, uma parceria de vida</p>
           <a href="#formContato"
-            className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 hover:bg-sky-700 text-white text-lg font-semibold px-8 py-3 rounded-full transition-colors duration-300">
+            className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-white text-lg font-semibold px-8 py-3 rounded-full hover:-translate-y-0.5 hover:shadow-lg shadow-none transition-all duration-300">
               Fale com um de nossos corretores
           </a>
         </div>
       </section>
 
-      <div className="min-h-screen flex flex-col items-center py-16 px-4 bg-linear-to-br from-white to-sky-100">
+      <div 
+        className="min-h-screen flex flex-col items-center py-16 px-4"
+        style={{
+          backgroundImage: `
+          repeating-linear-gradient(
+          -45deg,
+          transparent,
+          transparent 20px,
+          rgba(186,230,255,0.25) 20px,
+          rgba(186,230,255,0.25) 21px
+          ),
+          linear-gradient(to bottom right, #ffffff, #e0f2fe)
+           `
+  }}
+      >
 
 
         {/* Fazer lógica para os cards só aparecerem quando estiver logado */}

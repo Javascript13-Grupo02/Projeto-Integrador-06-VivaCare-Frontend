@@ -1,8 +1,7 @@
 function Sobre() {
   return (
-    <div className="bg-linear-to-br from-white to-sky-200 w-full py-12 px-4 min-h-screen flex flex-col items-center">
+    <div className="flex flex-col items-center w-full">
       <div className="max-w-7xl mx-auto space-y-16">
-        <div className="max-w-7xl mx-auto space-y-16"></div>
         <div className="text-center space-y-8">
           <h1 className="text-3xl md:text-5xl font-bold  text-slate-950">
             VivaCare

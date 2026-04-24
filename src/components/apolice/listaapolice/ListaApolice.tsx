@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import type Apolice from "../../../models/Apolice";
 import { SyncLoader } from "react-spinners";
 import CardApolice from "../cardapolice/CardApolice";
+import ModalApolice from "../modalapolice/ModalApolice";
 
 function ListaApolices() {
 
@@ -68,12 +69,13 @@ function ListaApolices() {
                     )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 
-                                    lg:grid-cols-3 gap-2">
+                                    lg:grid-cols-3 gap-6 items-stretch">
                             {
                                 apolices.map((apolice) => (
                                     <CardApolice key={apolice.id} apolice={apolice}/>
                                 ))
                             }
+                            <ModalApolice />
                     </div>
                 </div>
             </div>

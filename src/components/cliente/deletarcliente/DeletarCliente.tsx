@@ -68,7 +68,7 @@ function DeletarCliente() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-white to-sky-100 py-12 px-4 flex items-start justify-center">
+    <div className="min-h-screen py-12 px-4 flex items-start justify-center w-full">
       <div className="w-full max-w-2xl flex flex-col gap-4">
 
         {/* Título */}
@@ -76,7 +76,7 @@ function DeletarCliente() {
           <h1 className="text-2xl font-extrabold text-slate-950 tracking-tight">
             Descadastrar Cliente
           </h1>
-          <p className="text-slate-600 text-sm mt-1">
+          <p className="text-slate-600 mt-1">
             Tem certeza que deseja descadastrar este cliente?
           </p>
         </div>

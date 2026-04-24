@@ -94,7 +94,7 @@ function AtualizarPerfil() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-white to-sky-100 py-12 px-4 flex items-start justify-center">
+    <div className="flex items-start justify-center w-full">
       <div className="w-full max-w-2xl">
 
         {/* Card */}
@@ -114,7 +114,11 @@ function AtualizarPerfil() {
           {/* Avatar */}
           <div className="flex justify-center -mt-14 relative z-10">
             <img
-              src={user.foto || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.nome || 'U') + '&background=0369a1&color=fff&size=128'}
+          src={
+              usuario.foto && usuario.foto !== "string"
+                  ? usuario.foto
+                  : `https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nome)}&background=075985&color=fff`
+              } 
               alt={`Foto de ${user.nome}`}
               className="w-28 h-28 rounded-full border-4 border-white shadow-md object-cover"
             />

@@ -6,6 +6,7 @@ import { ToastAlerta } from "../../../utils/ToastAlerta";
 import { SyncLoader } from "react-spinners";
 import type Cliente from "../../../models/Cliente";
 import CardCliente from "../cardcliente/CardCliente";
+import ModalCliente from "../modalcliente/ModalCliente";
 
 function ListaClientes() {
   const navigate = useNavigate();
@@ -62,10 +63,11 @@ function ListaClientes() {
             </span>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
             {clientes.map((cliente) => (
               <CardCliente key={cliente.id} cliente={cliente} />
             ))}
+            <ModalCliente />
           </div>
         </div>
       </div>

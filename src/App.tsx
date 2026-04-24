@@ -16,6 +16,45 @@ import FormUsuario from "./pages/cadastro/Cadastro";
 import Perfil from "./pages/perfil/Perfil";
 import AtualizarPerfil from "./pages/perfil/AtualizarPerfil";
 
+// function FundoClaro({ children }: { children: React.ReactNode }) {
+//   return (
+//     <div
+//       className="min-h-screen flex flex-col items-center py-16 px-4"
+//       style={{
+//         backgroundImage: `
+//           radial-gradient(ellipse at top left, rgba(56,189,248,0.25) 0%, transparent 55%),
+//           radial-gradient(ellipse at bottom right, rgba(14,165,233,0.2) 0%, transparent 55%),
+//           linear-gradient(135deg, #ffffff 0%, #f0f9ff 50%, #e0f2fe 100%)
+//         `
+//       }}
+//     >
+//       {children}
+//     </div>
+//   )
+// }
+
+function FundoListras({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      className="min-h-screen flex flex-col items-start justify-start py-16 px-4"
+      style={{
+        backgroundImage: `
+          repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 20px,
+            rgba(186,230,255,0.25) 20px,
+            rgba(186,230,255,0.25) 21px
+          ),
+          linear-gradient(to bottom right, #ffffff, #e0f2fe)
+        `
+      }}
+    >
+      {children}
+    </div>
+  )
+}
+
 function App() {
   return (
     <BrowserRouter>
@@ -25,20 +64,20 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />}/>
         <Route path="/home" element={<Home />}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/sobre" element={<Sobre/>}/>
-        <Route path="/equipe" element={<Equipe/>}/>
-        <Route path="/perfil" element={<Perfil/>}/>
-        <Route path="/atualizarusuario" element={<AtualizarPerfil/>}/>
-        <Route path="/apolices" element={<ListaApolices/>}/>
-        <Route path="/clientes" element={<ListaClientes/>}/>
-        <Route path="/cadastro" element={<FormUsuario/>}/>
-        <Route path="/deletarapolice/:id" element={<DeletarApolice/>}/>
+        <Route path="/login" element={<FundoListras><Login /></FundoListras>}/>
+        <Route path="/sobre" element={<FundoListras><Sobre /></FundoListras>}/>
+        <Route path="/equipe" element={<FundoListras><Equipe /></FundoListras>}/>
+        <Route path="/perfil" element={<FundoListras><Perfil /></FundoListras>}/>
+        <Route path="/atualizarusuario" element={<FundoListras><AtualizarPerfil/></FundoListras>}/>
+        <Route path="/apolices" element={<FundoListras><ListaApolices /></FundoListras>}/>
+        <Route path="/clientes" element={<FundoListras><ListaClientes /></FundoListras>}/>
+        <Route path="/cadastro" element={<FundoListras><FormUsuario/></FundoListras>}/>
+        <Route path="/deletarapolice/:id" element={<FundoListras><DeletarApolice/></FundoListras>}/>
         <Route path="/cadastrarapolice" element={<FormApolice/>}/>
-        <Route path="/editarapolice/:id" element={<FormApolice/>}/>
-        <Route path="/deletarcliente/:id" element={<DeletarCliente/>}/>
+        <Route path="/editarapolice/:id" element={<FundoListras><FormApolice /></FundoListras>}/>
+        <Route path="/deletarcliente/:id" element={<FundoListras><DeletarCliente/></FundoListras>}/>
         <Route path="/cadastrarcliente" element={<FormCliente/>}/>
-        <Route path="/editarcliente/:id" element={<FormCliente/>}/>
+        <Route path="/editarcliente/:id" element={<FundoListras><FormCliente /></FundoListras>}/>
       </Routes>
     </AuthProvider>
     </BrowserRouter>

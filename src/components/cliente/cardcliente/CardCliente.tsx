@@ -15,10 +15,10 @@ function CardCliente({ cliente }: CardClienteProps) {
       <div className="flex items-center gap-4 px-6 py-5 border-b border-white/8">
         <img
           src={
-            cliente.foto && cliente.foto !== "string"
+           cliente.foto && cliente.foto !== "string"
               ? cliente.foto
               : `https://ui-avatars.com/api/?name=${encodeURIComponent(cliente.nome)}&background=075985&color=fff`
-          }
+          } 
           alt={`Foto de ${cliente.nome}`}
           className="w-14 h-14 rounded-full object-cover border-2 border-white/15 shrink-0"
         />
