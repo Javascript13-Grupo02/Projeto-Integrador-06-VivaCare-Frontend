@@ -38,18 +38,30 @@ function FundoListras({ children }: { children: React.ReactNode }) {
   return (
     <div
       className="min-h-screen flex flex-col items-start justify-start py-16 px-4"
+      // style={{
+      //   backgroundImage: `
+      //     repeating-linear-gradient(
+      //       -45deg,
+      //       transparent,
+      //       transparent 20px,
+      //       rgba(186,230,255,0.25) 20px,
+      //       rgba(186,230,255,0.25) 21px
+      //     ),
+      //     linear-gradient(to bottom right, #ffffff, #e0f2fe)
+      //   `
+      // }}
       style={{
         backgroundImage: `
           repeating-linear-gradient(
             -45deg,
             transparent,
-            transparent 20px,
-            rgba(186,230,255,0.25) 20px,
-            rgba(186,230,255,0.25) 21px
+            transparent 7px,
+            rgba(125,211,252,0.4) 7px,
+            rgba(125,211,252,0.4) 8px
           ),
-          linear-gradient(to bottom right, #ffffff, #e0f2fe)
+          linear-gradient(to bottom right, #f0f9ff, #bae6fd)
         `
-      }}
+      }}    
     >
       {children}
     </div>

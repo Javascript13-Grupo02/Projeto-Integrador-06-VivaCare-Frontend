@@ -4,6 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import FormContato from "../../components/formcontato/FormContato";
 
 
+
 function Home() {
 
     const {usuario} = useContext(AuthContext);
@@ -87,16 +88,16 @@ function Home() {
         className="min-h-screen flex flex-col items-center py-16 px-4"
         style={{
           backgroundImage: `
-          repeating-linear-gradient(
-          -45deg,
-          transparent,
-          transparent 20px,
-          rgba(186,230,255,0.25) 20px,
-          rgba(186,230,255,0.25) 21px
-          ),
-          linear-gradient(to bottom right, #ffffff, #e0f2fe)
-           `
-  }}
+            repeating-linear-gradient(
+              -45deg,
+              transparent,
+              transparent 7px,
+              rgba(125,211,252,0.4) 7px,
+              rgba(125,211,252,0.4) 8px
+            ),
+            linear-gradient(to bottom right, #f0f9ff, #bae6fd)
+          `
+        }}
       >
 
 

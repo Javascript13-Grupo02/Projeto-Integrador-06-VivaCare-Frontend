@@ -30,10 +30,24 @@ function Login() {
     handleLogin(usuarioLogin);
   }
 
+  const isMobile = window.innerWidth < 640
+
   return (
     <div
       className="min-h-screen flex items-center justify-center bg-cover bg-center relative"
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1597524678053-5e6fef52d8a3')" }}
+      style={{
+             backgroundImage: isMobile ? `
+            repeating-linear-gradient(
+              -45deg,
+              transparent,
+              transparent 7px,
+              rgba(56,189,248,0.5) 7px,
+              rgba(56,189,248,0.5) 8px
+            ),
+            linear-gradient(to bottom right, #f0f9ff, #bae6fd)
+          `
+        : "url('https://images.unsplash.com/photo-1597524678053-5e6fef52d8a3')"
+      }}
     >
       {/* Overlay azul escuro */}
       <div className="absolute inset-0 bg-sky-950/60" />
