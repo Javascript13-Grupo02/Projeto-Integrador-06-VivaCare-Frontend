@@ -6,16 +6,16 @@ function Footer() {
 
     return (
         <div className="flex justify-center bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-white">
-            <div className="container flex items-center justify-between py-4 px-6">
+            <div className="container flex flex-col md:flex-row items-center justify-between py-4 px-6 gap-4">
 
                 {/* Copyright */}
-                <p className="text-base md:text-xl font-bold">
+                <p className="text-sm md:text-lg font-bold">
                     VivaCare | Copyright: {data}
                 </p>
 
                 {/* Redes Sociais */}
-                <div className="flex flex-col items-center gap-1">
-                    <p className="text-lg text-center">Acesse nossas redes sociais</p>
+                <div className="flex flex-col items-center gap-2">
+                    <p className="text-base md:text-lg text-center">Acesse nossas redes sociais</p>
                     <div className="flex gap-4 items-center">
 
                         <a href="https://www.instagram.com/_allcare/" target="_blank" rel="noopener noreferrer" className="hover:text-[#45a8f0] transition-colors">
@@ -37,7 +37,7 @@ function Footer() {
                 </div>
 
                 {/* Links */}
-                <div className="flex flex-col md:flex-row gap-4 text-sm">
+                <div className="flex md:flex-row gap-4 text-sm">
                     <a href="#" className="hover:text-[#45a8f0] transition-colors">Termos</a>
                     <a href="#" className="hover:text-[#45a8f0] transition-colors">Privacidade</a>
                     <a href="#" className="hover:text-[#45a8f0] transition-colors">Acessibilidade</a>
