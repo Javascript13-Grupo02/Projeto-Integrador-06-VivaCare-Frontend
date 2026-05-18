@@ -7,8 +7,12 @@ import { ToastAlerta } from "../../../utils/ToastAlerta";
 import type Apolice from "../../../models/Apolice";
 import type Cliente from "../../../models/Cliente";
 
-function FormApolice() {
+function formatarData(valor: string | undefined): string {
+    if (!valor) return '';
+    return valor.split('T')[0];
+}
 
+function FormApolice() {
     const planos = ['VivaCare Gold', 'VivaCare Premium', 'VivaCare Plus+', 'VivaCare Basic'];
 
     const navigate = useNavigate();
@@ -21,23 +25,20 @@ function FormApolice() {
     const { usuario } = useContext(AuthContext);
     const token = usuario.token;
 
-    async function buscarApolicePorId(id: string) {
-        try {
-            await buscar(`/apolices/${id}`, setApolice, { headers: { Authorization: token } });
-        } catch (error: any) {}
-    }
-
     async function buscarClientes(nome: string) {
-        if (nome.length < 3) return;
+        if (nome.length < 3) {
+            setClientes([]);
+            return;
+        }
         try {
             await buscar(`/clientes/nome/${nome}`, setClientes, { headers: { Authorization: token } });
         } catch (error) {
-            console.error("Erro ao buscar clientes");
+            console.error("Erro ao buscar clientes", error);
         }
     }
 
     function selecionarCliente(cliente: Cliente) {
-        setApolice({ ...apolice, cliente: cliente });
+        setApolice(prev => ({ ...prev, cliente }));
         setClientes([]);
         setBuscaCliente(cliente.nome);
     }
@@ -46,36 +47,91 @@ function FormApolice() {
         if (token === '') {
             ToastAlerta('Você precisa estar logado!', 'info');
             navigate('/');
+            return;
         }
-        if (id !== undefined) {
-            buscarApolicePorId(id);
-        } else {
-            setApolice(prev => ({ ...prev, usuario: usuario }));
+
+        if (id === undefined) {
+            setApolice(prev => ({ ...prev, usuario }));
+            return;
         }
+
+        let cancelado = false;
+
+        async function fetchApolice() {
+            try {
+                await buscar(
+                    `/apolices/id/${id}`,
+                    (dados: any) => {
+                        if (cancelado) return; // descarta resultado de chamada cancelada
+
+                        if (dados?.statusCode === 401 || dados?.message === 'Unauthorized') {
+                            ToastAlerta('Sessão expirada. Faça login novamente.', 'info');
+                            navigate('/');
+                            return;
+                        }
+
+                        setApolice({
+                            ...dados,
+                            data_inicio: formatarData(dados.data_inicio),
+                            data_fim: formatarData(dados.data_fim),
+                        });
+
+                        if (dados.cliente?.nome) {
+                            setBuscaCliente(dados.cliente.nome);
+                        }
+                    },
+                    { headers: { Authorization: token } }
+                );
+            } catch (error: any) {
+                if (cancelado) return;
+                console.error('Erro ao buscar apólice:', error);
+                ToastAlerta('Erro ao buscar apólice.', 'erro');
+            }
+        }
+
+        fetchApolice();
+
+        // Cleanup: quando o React desmonta (StrictMode ou troca de rota),
+        // marca cancelado para ignorar qualquer setState pendente
+        return () => {
+            cancelado = true;
+        };
     }, [token, id]);
 
     function atualizarEstado(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
-        const valor = e.target.value;
-        const valorFinal = e.target.type === 'number' ? Number(valor) : valor;
-        setApolice({ ...apolice, [e.target.name]: valorFinal, usuario: usuario });
+        const { name, value, type } = e.target;
+        const valorFinal = type === 'number' ? Number(value) : value;
+
+        setApolice(prev => ({
+            ...prev,
+            [name]: valorFinal,
+            usuario: prev.usuario ?? usuario,
+        }));
     }
 
     async function gerarNovaApolice(e: SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
+
+        if (!apolice.cliente?.id) {
+            ToastAlerta('Por favor, selecione um cliente válido!', 'info');
+            return;
+        }
+
         setIsLoading(true);
         try {
             if (id !== undefined) {
-                await atualizar(`/apolices`, apolice, setApolice, { headers: { Authorization: token } });
-                ToastAlerta('Apolice atualizada com sucesso!', 'sucesso');
+                await atualizar(`/apolices/atualizar`, apolice, setApolice, { headers: { Authorization: token } });
+                ToastAlerta('Apólice atualizada com sucesso!', 'sucesso');
             } else {
-                await cadastrar(`/apolices`, apolice, setApolice, { headers: { Authorization: token } });
-                ToastAlerta('Apolice cadastrada com sucesso!', 'sucesso');
+                await cadastrar(`/apolices/cadastrar`, apolice, setApolice, { headers: { Authorization: token } });
+                ToastAlerta('Apólice cadastrada com sucesso!', 'sucesso');
             }
             navigate('/apolices');
         } catch (error) {
-            ToastAlerta('Erro ao processar a Apolice.', 'erro');
+            ToastAlerta('Erro ao processar a Apólice.', 'erro');
+        } finally {
+            setIsLoading(false);
         }
-        setIsLoading(false);
     }
 
     const inputClass = "border-2 border-slate-300 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full";
@@ -87,26 +143,32 @@ function FormApolice() {
                 {id !== undefined ? 'Editar Apólice' : 'Cadastrar Apólice'}
             </h1>
 
-            <form className="flex flex-col gap-5 w-full max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-sky-200" onSubmit={gerarNovaApolice}>
-
+            <form
+                className="flex flex-col gap-5 w-full max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-sky-200"
+                onSubmit={gerarNovaApolice}
+            >
                 {/* Busca de Cliente */}
                 <div className="flex flex-col gap-2 relative">
-                    <label className={labelClass}>Pesquisar Cliente</label>
+                    <label className={labelClass}>Pesquisar/Alterar Cliente</label>
                     <input
                         type="text"
                         placeholder="Digite o nome do cliente..."
                         className={inputClass}
+                        value={buscaCliente}
                         onChange={(e) => {
                             setBuscaCliente(e.target.value);
                             buscarClientes(e.target.value);
                         }}
-                        value={buscaCliente}
                     />
                     {clientes.length > 0 && (
                         <div className="absolute z-10 top-20 w-full bg-white border border-sky-200 rounded-xl shadow-xl flex flex-col">
                             {clientes.map(c => (
-                                <button key={c.id} type="button" onClick={() => selecionarCliente(c)}
-                                    className="p-3 text-left hover:bg-sky-50 border-b last:border-0 first:rounded-t-xl last:rounded-b-xl">
+                                <button
+                                    key={c.id}
+                                    type="button"
+                                    onClick={() => selecionarCliente(c)}
+                                    className="p-3 text-left hover:bg-sky-50 border-b last:border-0 first:rounded-t-xl last:rounded-b-xl"
+                                >
                                     <p className="font-bold text-sky-800">{c.nome}</p>
                                     <p className="text-xs text-gray-500">{c.email}</p>
                                 </button>
@@ -118,7 +180,7 @@ function FormApolice() {
                 {/* Cliente confirmado */}
                 {apolice.cliente?.id && (
                     <div className="bg-sky-50 p-4 rounded-xl flex flex-col gap-1 border border-sky-200">
-                        <p className="text-xs text-sky-800 font-bold uppercase">Cliente Confirmado:</p>
+                        <p className="text-xs text-sky-800 font-bold uppercase">Cliente Vinculado:</p>
                         <p className="font-semibold text-sky-900">{apolice.cliente.nome}</p>
                         <p className="text-sm text-gray-500">{apolice.cliente.email}</p>
                     </div>
@@ -127,32 +189,45 @@ function FormApolice() {
                 {/* Plano */}
                 <div className="flex flex-col gap-2">
                     <label className={labelClass}>Plano</label>
-                    <select name="plano"
+                    <select
+                        name="plano"
                         className="border-2 border-slate-300 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full bg-white"
-                        onChange={atualizarEstado} value={apolice.plano || ''}>
+                        onChange={atualizarEstado}
+                        value={apolice.plano || ''}
+                    >
                         <option value="" disabled>Selecione um plano</option>
                         {planos.map(plano => (
                             <option key={plano} value={plano}>{plano}</option>
                         ))}
                     </select>
-                    {apolice.plano && (
-                        <p className="text-xs text-sky-600 font-medium">Plano selecionado: {apolice.plano}</p>
-                    )}
+                    <div className="bg-sky-50 p-4 rounded-xl flex flex-col gap-1 border border-sky-200">
+                            <p className="text-xs text-sky-800 font-bold uppercase">Plano selecionado:</p>
+                            <p className="font-semibold text-sky-900">{apolice.plano}</p>
+                    </div>
                 </div>
 
                 {/* Preço e Dependentes */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
                         <label className={labelClass}>Preço</label>
-                        <input type="number" name="preco" placeholder="R$ 0,00"
+                        <input
+                            type="number"
+                            name="preco"
+                            placeholder="R$ 0,00"
                             className={`${inputClass} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
-                            onChange={atualizarEstado} value={apolice.preco} />
+                            onChange={atualizarEstado}
+                            value={apolice.preco ?? ''}
+                        />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className={labelClass}>Dependentes</label>
-                        <input type="number" name="dependentes"
+                        <input
+                            type="number"
+                            name="dependentes"
                             className={`${inputClass} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
-                            onChange={atualizarEstado} value={apolice.dependentes} />
+                            onChange={atualizarEstado}
+                            value={apolice.dependentes ?? ''}
+                        />
                     </div>
                 </div>
 
@@ -160,25 +235,36 @@ function FormApolice() {
                 <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-2">
                         <label className={labelClass}>Início</label>
-                        <input type="date" name="data_inicio" className={inputClass}
-                            onChange={atualizarEstado} value={apolice.data_inicio} />
+                        <input
+                            type="date"
+                            name="data_inicio"
+                            className={inputClass}
+                            onChange={atualizarEstado}
+                            value={apolice.data_inicio || ''}
+                        />
                     </div>
                     <div className="flex flex-col gap-2">
                         <label className={labelClass}>Fim</label>
-                        <input type="date" name="data_fim" className={inputClass}
-                            onChange={atualizarEstado} value={apolice.data_fim} />
+                        <input
+                            type="date"
+                            name="data_fim"
+                            className={inputClass}
+                            onChange={atualizarEstado}
+                            value={apolice.data_fim || ''}
+                        />
                     </div>
                 </div>
 
-                <button type="submit"
-                    className="mt-2 bg-sky-800 text-white font-bold py-3 rounded-xl hover:bg-sky-900 transition-colors flex justify-center">
+                <button
+                    type="submit"
+                    className="mt-2 bg-sky-800 text-white font-bold py-3 rounded-xl hover:bg-sky-900 transition-colors flex justify-center"
+                >
                     {isLoading ? <ClipLoader size={20} color="#fff" /> : (id ? 'Atualizar' : 'Cadastrar')}
                 </button>
             </form>
         </>
     );
 
-    // Página solo (edição)
     if (id !== undefined) {
         return (
             <div className="min-h-screen flex flex-col items-center py-16 px-4 w-full">
@@ -187,7 +273,6 @@ function FormApolice() {
         );
     }
 
-    // Modal (cadastro)
     return (
         <div className="flex flex-col items-center px-4 py-4 w-full">
             {formContent}

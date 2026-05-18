@@ -8,7 +8,10 @@ function Login() {
 
   const navigate = useNavigate();
 
-  const [usuarioLogin, setUsuarioLogin] = useState<UsuarioLogin>({} as UsuarioLogin);
+  const [usuarioLogin, setUsuarioLogin] = useState<UsuarioLogin>({
+    usuario: "",
+    senha: "",
+  } as UsuarioLogin);
 
   const { usuario, handleLogin, isLoading } = useContext(AuthContext);
 

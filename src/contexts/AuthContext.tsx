@@ -26,6 +26,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       usuario: "",
       senha: "",
       foto: "",
+      roles: "",
       token: "",
     };
   });
@@ -35,8 +36,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function handleLogin(usuarioLogin: UsuarioLogin) {
     setIsLoading(true);
+    const credenciaisDoLogin = {
+    usuario: usuarioLogin.usuario,
+    senha: usuarioLogin.senha
+    };
     try {
-      await login("/usuarios/logar", usuarioLogin, (dados: UsuarioLogin) => {
+      // Enviamos 'credenciaisDoLogin' em vez do objeto 'usuarioLogin' completo
+      await login("usuarios/logar", credenciaisDoLogin, (dados: UsuarioLogin) => {
         setUsuario(dados);
         localStorage.setItem('usuario', JSON.stringify(dados));
       });
@@ -58,6 +64,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       usuario: "",
       senha: "",
       foto: "",
+      roles:"",
       token: "",
     });
   }

@@ -58,7 +58,7 @@ function Navbar() {
 
                 <div className='flex gap-1 sm:gap-4'>
                     <Link to='/apolices' className='hover:text-[#45a8f0] transition-colors hidden sm:flex gap-4'>Apólices</Link>
-                    <Link to='/clientes' className='hover:text-[#45a8f0] transition-colors hidden sm:flex gap-4'>Clientes</Link>
+                    {['admin', 'corretor'].includes(usuario.roles) && (<Link to='/clientes' className='hover:text-[#45a8f0] transition-colors hidden sm:flex gap-4'>Clientes</Link>)}                    
                     <Link to='/sobre' className='hover:text-[#45a8f0] transition-colors'>Sobre</Link>
                     <Link to='/equipe' className='hover:text-[#45a8f0] transition-colors'>Equipe</Link>
                     <Link to='/perfil' className='hover:text-[#45a8f0] transition-colors'>Perfil</Link>

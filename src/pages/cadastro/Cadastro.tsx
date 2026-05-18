@@ -18,6 +18,9 @@ function FormUsuario() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
 
+  // Controla a exibição do formulário
+  const [formVisivel, setFormVisivel] = useState<boolean>(false);
+
   const { usuario, handleLogout } = useContext(AuthContext);
   const token = usuario?.token || "";
 
@@ -27,6 +30,7 @@ function FormUsuario() {
     usuario: "",
     senha: "",
     foto: "",
+    roles: ""
   } as Usuario);
 
   const [confirmarSenha, setConfirmarSenha] = useState<string>("");
@@ -36,11 +40,31 @@ function FormUsuario() {
       await buscar(`/usuarios/${id}`, setUsuarioForm, {
         headers: { Authorization: token },
       });
+      // Se estiver editando, exibe o formulário direto
+      setFormVisivel(true);
     } catch (error: any) {
       if (error.toString().includes("401")) {
         handleLogout();
       }
     }
+  }
+
+  function registrarTipoUsuario(tipo: "cliente" | "corretor") {
+    setUsuarioForm({
+      ...usuarioForm,
+      // @ts-ignore - Evita erros caso 'roles' não esteja na interface estática Usuario
+      roles: tipo
+    });
+    setFormVisivel(true);
+  }
+
+  function cancelarSelecao() {
+    setUsuarioForm({
+      ...usuarioForm,
+      // @ts-ignore
+      roles: ""
+    });
+    setFormVisivel(false);
   }
 
   useEffect(() => {
@@ -110,15 +134,52 @@ function FormUsuario() {
   }
 
   return (
-    <div className="container flex flex-col mx-auto items-center mt-10">
-      <h1 className="text-4xl text-center font-bold text-sky-800 my-8">
-        {id !== undefined ? "Editar Usuário" : "Cadastrar Usuário"}
-      </h1>
 
+    <div className="container flex flex-col columns-1 mx-auto items-center mt-10">
+
+      {!formVisivel && (
+      <div className="flex flex-col gap-4 w-full max-w-lg">
+        {/* Botão Clientes*/}
+        <button
+          type="button" // 
+          onClick={() => registrarTipoUsuario("cliente")}
+          className="w-full py-3 rounded-xl border-2 border-sky-800 text-sky-900 font-bold text-sm hover:-translate-y-0.5 hover:bg-sky-50 transition-all duration-300 flex justify-center items-center"
+        >
+          Novo Cliente
+        </button>
+
+        {/* Botão Corretores*/}
+        <button
+          type="button"
+          onClick={() => registrarTipoUsuario("corretor")}
+          className="w-full py-3 rounded-xl text-white font-bold text-sm hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 flex justify-center items-center"
+          style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}
+        >
+            <span>Novo Corretor</span>
+          
+        </button>
+    </div>
+    
+      )}
+
+    {formVisivel && (
+      <>
+      <h1 className="text-4xl text-center font-bold text-sky-800 my-8">
+        {id !== undefined ? "Editar" : "Cadastrar"}{" "}
+        {/* @ts-ignore */}
+        {usuarioForm.roles === "corretor" ? "Corretor" : "Cliente"}
+      </h1>
       <form
         className="flex flex-col w-full max-w-lg gap-4 bg-white p-8 rounded-2xl shadow-xl border border-sky-200"
         onSubmit={gerarNovoUsuario}
       >
+        {/* Input field 'roles' com a propriedade hidden */}
+            <input
+              type="hidden"
+              name="roles"
+              // @ts-ignore
+              value={usuarioForm.roles || ""}
+            />
         <div className="flex flex-col gap-2">
           <label htmlFor="nome" className="font-semibold text-sky-900">
             Nome completo
@@ -193,31 +254,45 @@ function FormUsuario() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold w-full py-3 mt-4 flex justify-center transition-colors"
-        >
-          {isLoading ? (
-            <ClipLoader color="#ffffff" size={24} />
-          ) : (
-            <span>
-              {id === undefined ? "Cadastrar Usuário" : "Atualizar Usuário"}
-            </span>
-          )}
-        </button>
+        {/* ADICIONADO: Div contendo os botões de ação do formulário dispostos lado a lado */}
+            <div className="flex gap-4 mt-4 w-full">
+              <button
+                type="button"
+                onClick={cancelarSelecao}
+                className="w-1/3 rounded-xl border-2 border-slate-400 text-slate-700 font-bold py-3 hover:bg-slate-50 transition-colors"
+              >
+                Cancelar
+              </button>
 
-        {id === undefined && (
-          <p className="text-center text-sm text-slate-500">
-            Já tem uma conta?{" "}
-            <span
-              className="text-sky-800 hover:underline cursor-pointer"
-              onClick={() => navigate("/login")}
-            >
-              Entrar
-            </span>
-          </p>
+              <button
+                type="submit"
+                className="w-2/3 rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold py-3 flex justify-center transition-colors"
+              >
+                {isLoading ? (
+                  <ClipLoader color="#ffffff" size={24} />
+                ) : (
+                  <span>
+                    {id === undefined ? "Cadastrar" : "Atualizar"}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {id === undefined && (
+              <p className="text-center text-sm text-slate-500">
+                Já tem uma conta?{" "}
+                <span
+                  className="text-sky-800 hover:underline cursor-pointer"
+                  onClick={() => navigate("/login")}
+                >
+                  Entrar
+                </span>
+              </p>
         )}
       </form>
+      
+      </>
+    )}
     </div>
   );
 }

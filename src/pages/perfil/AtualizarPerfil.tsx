@@ -66,32 +66,35 @@ function AtualizarPerfil() {
   }
 
   async function atualizarUsuario(e: SyntheticEvent<HTMLFormElement>) {
-    e.preventDefault()
-    setIsLoading(true)
+    e.preventDefault();
+    setIsLoading(true);
 
-    if (confirmarSenha === user.senha && user.senha.length >= 8) {
-      try {
-        await atualizar(`/usuarios/atualizar`, user, setUser, {
-          headers: { Authorization: token },
-        })
-        ToastAlerta('Usuário atualizado! Efetue o Login Novamente.', 'info')
-        handleLogout()
-      } catch (error: any) {
-        if (error.toString().includes("401")) {
-          handleLogout()
-        } else {
-          ToastAlerta('Erro ao atualizar o usuário', 'erro')
-          retornar()
+    const senhaVazia = !user.senha || user.senha.length === 0;
+    const senhaValida = user.senha === confirmarSenha && user.senha.length >= 8;
+
+    if (senhaVazia || senhaValida) {
+        try {
+            await atualizar(`/usuarios/atualizar`, user, setUser, {
+                headers: { Authorization: token },
+            });
+            ToastAlerta('Usuário atualizado! Efetue o Login Novamente.', 'info');
+            handleLogout();
+        } catch (error: any) {
+            if (error.toString().includes("401")) {
+                handleLogout();
+            } else {
+                ToastAlerta('Erro ao atualizar o usuário', 'erro');
+                retornar();
+            }
         }
-      }
     } else {
-      ToastAlerta('Dados inconsistentes. Verifique as informações do usuário.', 'info')
-      setUser({ ...user, senha: "" })
-      setConfirmarSenha("")
+        ToastAlerta('Senha inválida. Mínimo 8 caracteres e as senhas devem ser iguais.', 'info');
+        setUser({ ...user, senha: "" });
+        setConfirmarSenha("");
     }
 
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+}
 
   return (
     <div className="flex items-start justify-center w-full">
@@ -188,12 +191,11 @@ function AtualizarPerfil() {
                   type="password"
                   id="senha"
                   name="senha"
-                  placeholder="Mínimo 8 caracteres"
-                  required
+                  placeholder="Deixe em branco para manter a atual ou digite uma nova senha"
                   minLength={8}
                   className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors"
                   value={user.senha || ""}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
+                  onChange={(e) => atualizarEstado(e)}
                 />
               </div>
 
@@ -206,7 +208,6 @@ function AtualizarPerfil() {
                   id="confirmarSenha"
                   name="confirmarSenha"
                   placeholder="Repita a nova senha"
-                  required
                   minLength={8}
                   className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors"
                   value={confirmarSenha}
