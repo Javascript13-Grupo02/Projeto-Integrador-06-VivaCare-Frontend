@@ -67,7 +67,7 @@ function CardCliente({ cliente }: CardClienteProps) {
 
       {/* Botões */}
       {mostraBarraAcoes && (
-        <div className= {`grid grid-cols-2 border-t border-white/8 ${podeEditar && podeDeletar ? "grid-cols-2" : "grid-cols-1"}`} >
+        <div className= {`grid border-t border-white/8 ${podeEditar && podeDeletar ? "grid-cols-2" : "grid-cols-1"}`} >
           
           {/* Botão Editar: Aparece para Admin e Corretor */}
           {podeEditar && (

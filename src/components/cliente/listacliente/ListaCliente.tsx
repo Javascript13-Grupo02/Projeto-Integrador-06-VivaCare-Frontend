@@ -7,7 +7,6 @@ import { ClipLoader, SyncLoader } from "react-spinners";
 import type Cliente from "../../../models/Cliente";
 import CardCliente from "../cardcliente/CardCliente";
 import ModalCliente from "../modalcliente/ModalCliente";
-import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 function ListaClientes() {
   const navigate = useNavigate();
@@ -74,47 +73,59 @@ function ListaClientes() {
 
     {/* Barra de busca por cliente */}
     
-      { usuario.roles === "admin" || usuario.roles === "corretor" ? (<form 
+    { usuario.roles === "admin" || usuario.roles === "corretor" ? (
+      <form
         onSubmit={(e) => {
           e.preventDefault();
-
           const formData = new FormData(e.currentTarget);
-          
           const nomeBuscado = formData.get("busca-cliente") as string;
-
           if (!nomeBuscado || nomeBuscado.trim() === "") {
             buscarClientes();
           }
-
           buscarClientesBarra(nomeBuscado);
         }}
-        className="flex flex-row w-full justify-center gap-2"
+        className="flex flex-row w-full justify-center gap-0"
       >
-        <input 
-          type="search"
-          name="busca-cliente" 
-          placeholder="Digite o nome do cliente que deseja buscar" 
-          className="w-xl border rounded-lg px-3 bg-white"
-          onChange={(e) => {
+        {/* Input */}
+        <div className="p-0.75 flex-1 max-w-xl rounded-l-[14px]"
+          style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}
+        >
+          <div className="bg-white rounded-l-[11px] h-full flex items-center gap-3 px-4">
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input
+              type="search"
+              name="busca-cliente"
+              placeholder={window.innerWidth < 640 ? "Buscar cliente..." : "Digite o nome do cliente que deseja buscar"}
+              className="w-full bg-transparent outline-none text-slate-800 text-sm py-3 sm:py-3.5 placeholder:text-slate-400 sm:placeholder:text-sm"
+              style={{}}
+              onChange={(e) => {
+                if (e.target.value === "") {
+                  buscarClientes();
+                }
+              }}
+            />
+          </div>
+        </div>
 
-            if (e.target.value === "") {
-              buscarClientes(); 
-            }
-          }}
-        />
-  
+        {/* Botão */}
         <button
           type="submit"
           disabled={isSearching}
-          className="bg-sky-800 text-white w-20 h-15 mt-2 py-3 rounded-lg hover:bg-sky-900 transition-colors flex justify-center items-center disabled:bg-sky-800/60 disabled:cursor-not-allowed"
+          className="rounded-r-[14px] px-5 sm:px-6 flex items-center justify-center hover:opacity-90 transition-opacity disabled:opacity-60 disabled:cursor-not-allowed"
+          style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}
         >
           {isSearching ? (
             <ClipLoader color="#ffffff" size={20} />
           ) : (
-            <MagnifyingGlassIcon size={26} color="#ffffff" />
+            <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 sm:w-5.5 sm:h-5.5" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
           )}
-        </button> 
-      </form>) : null}
+        </button>
+      </form>
+    ) : null}
         
 
       {isLoading && (

@@ -5,7 +5,7 @@ import {
   useEffect,
   useState,
 } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { AuthContext } from "../../contexts/AuthContext";
 import type Usuario from "../../models/Usuario";
@@ -137,30 +137,76 @@ function FormUsuario() {
 
     <div className="container flex flex-col columns-1 mx-auto items-center mt-10">
 
-      {!formVisivel && (
-      <div className="flex flex-col gap-4 w-full max-w-lg">
-        {/* Botão Clientes*/}
-        <button
-          type="button" // 
-          onClick={() => registrarTipoUsuario("cliente")}
-          className="w-full py-3 rounded-xl border-2 border-sky-800 text-sky-900 font-bold text-sm hover:-translate-y-0.5 hover:bg-sky-50 transition-all duration-300 flex justify-center items-center"
-        >
-          Novo Cliente
-        </button>
+    {!formVisivel && (
+      <div className="bg-white rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.3)] p-10 w-full max-w-sm flex flex-col gap-5 mx-4">
 
-        {/* Botão Corretores*/}
-        <button
-          type="button"
-          onClick={() => registrarTipoUsuario("corretor")}
-          className="w-full py-3 rounded-xl text-white font-bold text-sm hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 flex justify-center items-center"
-          style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}
-        >
-            <span>Novo Corretor</span>
-          
-        </button>
-    </div>
-    
-      )}
+        <div className="flex flex-col gap-2 text-center">
+          <h1 className="text-3xl font-extrabold text-sky-900">VivaCare</h1>
+          <p className="text-sm text-slate-500">Como deseja se cadastrar?</p>
+        </div>
+
+        <div className="h-px bg-slate-200" />
+
+        <div className="flex flex-col gap-4">
+
+          {/* Card Cliente */}
+          <button
+            type="button"
+            onClick={() => registrarTipoUsuario("cliente")}
+            className="w-full border-2 border-sky-900 rounded-xl text-left hover:bg-sky-50 transition-all duration-300"
+          >
+            <div className="flex items-center gap-4 p-5">
+              <div className="w-11 h-11 rounded-full bg-sky-100 flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-sky-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-sky-900">Novo Cliente</p>
+                <p className="text-xs text-sky-700">Quero consultar minhas apólices</p>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-sky-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </div>
+          </button>
+
+          {/* Card Corretor */}
+          <button
+            type="button"
+            onClick={() => registrarTipoUsuario("corretor")}
+            className="w-full rounded-xl text-left hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300"
+            style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}
+          >
+            <div className="flex items-center gap-4 p-5">
+              <div className="w-11 h-11 rounded-full bg-white/15 flex items-center justify-center shrink-0">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                </svg>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-bold text-white">Novo Corretor</p>
+                <p className="text-xs text-white/70">Quero gerenciar apólices</p>
+              </div>
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14M13 6l6 6-6 6"/>
+              </svg>
+            </div>
+          </button>
+
+        </div>
+
+        <div className="h-px bg-slate-200" />
+
+        <p className="text-center text-sm text-slate-500">
+          Já tem uma conta?{' '}
+          <Link to="/login" className="text-sky-700 font-semibold hover:underline">
+            Entrar
+          </Link>
+        </p>
+
+      </div>
+    )}
 
     {formVisivel && (
       <>

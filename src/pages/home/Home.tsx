@@ -9,6 +9,8 @@ function Home() {
 
     const {usuario} = useContext(AuthContext);
 
+    const podeVerClientes = ['admin', 'corretor'].includes(usuario.roles);
+
     let acessoRapido;
 
     if(usuario.token !== ''){
@@ -18,7 +20,7 @@ function Home() {
           <h2 className="text-2xl sm:text-2xl font-bold text-slate-950">Bem-vindo, {usuario.nome}!</h2>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 w-full max-w-5xl">
+        <div className={`grid grid-cols-1 ${podeVerClientes ? "lg:grid-cols-2 max-w-5xl" : "grid-cols-1 max-w-3xl"}  gap-8 w-full `}>
 
           <Link
             to="/apolices"
@@ -42,27 +44,32 @@ function Home() {
             </div>
           </Link>
 
-          <Link
-            to="/clientes"
-            className="rounded-2xl shadow-md shadow-black/80 overflow-hidden bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)] transition-all duration-300"
-          >
-            <div className="w-full h-48 overflow-hidden">
-              <img
-                src="https://images.unsplash.com/photo-1686771416282-3888ddaf249b"
-                alt="Clientes"
-                className="w-full h-48 object-cover"
-              />
-            </div>
-            <div className="p-6 flex flex-col gap-2">
-              <span className="text-slate-100 font-bold uppercase tracking-widest text-lg">Clientes</span>
-              <p className="text-slate-100 text-sm leading-relaxed">
-                Confira uma lista de todos os clientes cadastrados, acesse seus dados de contato e veja as apólices vinculadas a cada um.
-              </p>
-              <span className="text-slate-100 text-xs font-semibold uppercase tracking-widest mt-2 hover:underline">
-                Ver clientes →
-              </span>
-            </div>
-          </Link>
+          {
+            podeVerClientes && 
+            (
+              <Link
+              to="/clientes"
+              className="rounded-2xl shadow-md shadow-black/80 overflow-hidden bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 hover:-translate-y-1 hover:shadow-[0_8px_16px_rgba(0,0,0,0.4)] transition-all duration-300"
+            >
+              <div className="w-full h-48 overflow-hidden">
+                <img
+                  src="https://images.unsplash.com/photo-1686771416282-3888ddaf249b"
+                  alt="Clientes"
+                  className="w-full h-48 object-cover"
+                />
+              </div>
+              <div className="p-6 flex flex-col gap-2">
+                <span className="text-slate-100 font-bold uppercase tracking-widest text-lg">Clientes</span>
+                <p className="text-slate-100 text-sm leading-relaxed">
+                  Confira uma lista de todos os clientes cadastrados, acesse seus dados de contato e veja as apólices vinculadas a cada um.
+                </p>
+                <span className="text-slate-100 text-xs font-semibold uppercase tracking-widest mt-2 hover:underline">
+                  Ver clientes →
+                </span>
+              </div>
+            </Link>
+            )
+          }
 
         </div>
         </>

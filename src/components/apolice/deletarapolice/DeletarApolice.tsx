@@ -29,7 +29,7 @@ function DeletarApolice() {
 
   async function buscarPorId(id: string) {
     try {
-      await buscar(`/apolices/${id}`, setApolice, {
+      await buscar(`/apolices/id/${id}`, setApolice, {
         headers: { Authorization: token }
       });
     } catch (error: any) {
