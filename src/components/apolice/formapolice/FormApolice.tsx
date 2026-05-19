@@ -90,7 +90,6 @@ function FormApolice() {
         }
 
         fetchApolice();
-
         // Cleanup: quando o React desmonta (StrictMode ou troca de rota),
         // marca cancelado para ignorar qualquer setState pendente
         return () => {

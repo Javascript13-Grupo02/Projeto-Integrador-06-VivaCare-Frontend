@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { ToastAlerta } from "../../../utils/ToastAlerta";
 import { buscar } from "../../../services/Service";
 import { AuthContext } from "../../../contexts/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type Apolice from "../../../models/Apolice";
 import { SyncLoader } from "react-spinners";
 import CardApolice from "../cardapolice/CardApolice";
@@ -13,6 +13,8 @@ function ListaApolices() {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apolices, setApolices] = useState<Apolice[]>([]);
+
+  const { email } = useParams<{ email: string }>();
 
   const { usuario, handleLogout } = useContext(AuthContext);
   const token = usuario.token;
@@ -35,17 +37,21 @@ function ListaApolices() {
 
   async function buscarApolices() {
     try {
-      setIsLoading(true);
-      
-      if (temPrivilegio) {
-        // Busca todas as apólices (Admin / Corretor)
+      setIsLoading(true); 
+      // filtro de busca
+      if (email) {
+        // Se existe um e-mail na URL busca as apólices daquele cliente específico
+        await buscar(`/apolices/email/${email}`, setApolices, {
+          headers: { Authorization: token },
+        });
+      } else if (temPrivilegio) {
+        // Se NÃO há e-mail na URL E é admin/corretor, carrega tudo
         await buscar("/apolices", setApolices, {
           headers: { Authorization: token },
         });
       } else {
-        // Busca apólices pelo email do Cliente conectado
-        // Certifique-se que no backend a rota seja: /apolices/email/:email
-        await buscar(`/apolices/${usuario.usuario}`, setApolices, {
+        // Se NÃO há e-mail na URL e é um cliente comum, carrega só as apólices do cliente
+        await buscar(`/apolices/email/${usuario.usuario}`, setApolices, {
           headers: { Authorization: token },
         });
       }

@@ -3,15 +3,19 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { buscar } from "../../../services/Service";
 import { ToastAlerta } from "../../../utils/ToastAlerta";
-import { SyncLoader } from "react-spinners";
+import { ClipLoader, SyncLoader } from "react-spinners";
 import type Cliente from "../../../models/Cliente";
 import CardCliente from "../cardcliente/CardCliente";
 import ModalCliente from "../modalcliente/ModalCliente";
+import { MagnifyingGlassIcon } from "@phosphor-icons/react";
 
 function ListaClientes() {
   const navigate = useNavigate();
   const [clientes, setClientes] = useState<Cliente[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // Mudança: Estado exclusivo para controlar o carregamento do botão de pesquisa
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const { usuario, handleLogout } = useContext(AuthContext);
   const token = usuario.token;
@@ -28,6 +32,24 @@ function ListaClientes() {
   useEffect(() => {
     buscarClientes();
   }, []);
+
+  
+  async function buscarClientesBarra(nome: string) {
+    if (nome.length < 3) {
+      setClientes([]);
+      return;
+    }
+    try {
+      
+      setIsSearching(true); 
+      await buscar(`/clientes/nome/${nome}`, setClientes, { headers: { Authorization: token } });
+    } catch (error) {
+      console.error("Erro ao buscar clientes", error);
+    } finally {
+   
+      setIsSearching(false); 
+    }  
+  }
 
   async function buscarClientes() {
     if (token === "") return;
@@ -49,6 +71,52 @@ function ListaClientes() {
 
   return (
     <>
+
+    {/* Barra de busca por cliente */}
+    
+      { usuario.roles === "admin" || usuario.roles === "corretor" ? (<form 
+        onSubmit={(e) => {
+          e.preventDefault();
+
+          const formData = new FormData(e.currentTarget);
+          
+          const nomeBuscado = formData.get("busca-cliente") as string;
+
+          if (!nomeBuscado || nomeBuscado.trim() === "") {
+            buscarClientes();
+          }
+
+          buscarClientesBarra(nomeBuscado);
+        }}
+        className="flex flex-row w-full justify-center gap-2"
+      >
+        <input 
+          type="search"
+          name="busca-cliente" 
+          placeholder="Digite o nome do cliente que deseja buscar" 
+          className="w-xl border rounded-lg px-3 bg-white"
+          onChange={(e) => {
+
+            if (e.target.value === "") {
+              buscarClientes(); 
+            }
+          }}
+        />
+  
+        <button
+          type="submit"
+          disabled={isSearching}
+          className="bg-sky-800 text-white w-20 h-15 mt-2 py-3 rounded-lg hover:bg-sky-900 transition-colors flex justify-center items-center disabled:bg-sky-800/60 disabled:cursor-not-allowed"
+        >
+          {isSearching ? (
+            <ClipLoader color="#ffffff" size={20} />
+          ) : (
+            <MagnifyingGlassIcon size={26} color="#ffffff" />
+          )}
+        </button> 
+      </form>) : null}
+        
+
       {isLoading && (
         <div className="flex justify-center w-full my-8">
           <SyncLoader color="#075985" size={25} />

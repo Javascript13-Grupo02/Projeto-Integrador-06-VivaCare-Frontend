@@ -83,6 +83,7 @@ function App() {
         <Route path="/perfil" element={<FundoListras><Perfil /></FundoListras>}/>
         <Route path="/atualizarusuario" element={<FundoListras><AtualizarPerfil/></FundoListras>}/>
         <Route path="/apolices" element={<FundoListras><ListaApolices /></FundoListras>}/>
+        <Route path="/apolices/email/:email" element={<FundoListras><ListaApolices /></FundoListras>}/>
         <Route path="/clientes" element={<FundoListras><ListaClientes /></FundoListras>}/>
         <Route path="/cadastro" element={<FundoListras><FormUsuario/></FundoListras>}/>
         <Route path="/deletarapolice/:id" element={<FundoListras><DeletarApolice/></FundoListras>}/>
