@@ -16,7 +16,7 @@ function ListaApolices() {
 
   const { email } = useParams<{ email: string }>();
 
-  const { usuario, handleLogout } = useContext(AuthContext);
+  const { usuario, handleLogout, isLogout } = useContext(AuthContext);
   const token = usuario.token;
 
   // Garante que o usuario tem uma das roles de privilégio
@@ -24,10 +24,12 @@ function ListaApolices() {
 
   useEffect(() => {
     if (token === "") {
-      ToastAlerta("Você precisa estar logado!", "info");
+      if (!isLogout) {
+        ToastAlerta("Você precisa estar logado!", "info");
+      }
       navigate("/");
     }
-  }, [token, navigate]);
+  }, [token, isLogout, navigate]);
 
   useEffect(() => {
     if (token !== "") {

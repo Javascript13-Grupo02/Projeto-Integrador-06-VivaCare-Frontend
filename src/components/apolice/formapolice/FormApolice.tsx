@@ -20,9 +20,10 @@ function FormApolice() {
     const [apolice, setApolice] = useState<Apolice>({} as Apolice);
     const [clientes, setClientes] = useState<Cliente[]>([]);
     const [buscaCliente, setBuscaCliente] = useState<string>('');
+    const [tentouEnviar, setTentouEnviar] = useState<boolean>(false);
 
     const { id } = useParams<{ id: string }>();
-    const { usuario } = useContext(AuthContext);
+    const { usuario, handleLogout, isLogout } = useContext(AuthContext);
     const token = usuario.token;
 
     async function buscarClientes(nome: string) {
@@ -32,8 +33,12 @@ function FormApolice() {
         }
         try {
             await buscar(`/clientes/nome/${nome}`, setClientes, { headers: { Authorization: token } });
-        } catch (error) {
-            console.error("Erro ao buscar clientes", error);
+        } catch (error: any) {
+            if (error.toString().includes("401")) {
+                handleLogout();
+            } else {
+                ToastAlerta("Erro ao buscar clientes.", "erro");
+            }
         }
     }
 
@@ -45,7 +50,9 @@ function FormApolice() {
 
     useEffect(() => {
         if (token === '') {
-            ToastAlerta('Você precisa estar logado!', 'info');
+            if (!isLogout) {
+                ToastAlerta('Você precisa estar logado!', 'info');
+            }
             navigate('/');
             return;
         }
@@ -84,7 +91,6 @@ function FormApolice() {
                 );
             } catch (error: any) {
                 if (cancelado) return;
-                console.error('Erro ao buscar apólice:', error);
                 ToastAlerta('Erro ao buscar apólice.', 'erro');
             }
         }
@@ -95,11 +101,13 @@ function FormApolice() {
         return () => {
             cancelado = true;
         };
-    }, [token, id]);
+    }, [token, id, isLogout, navigate]);
 
     function atualizarEstado(e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) {
         const { name, value, type } = e.target;
-        const valorFinal = type === 'number' ? Number(value) : value;
+        
+        // Se o campo for de número e estiver vazio, passamos string vazia para o 0 não ficar preso.
+        const valorFinal = type === 'number' ? (value === '' ? '' : Number(value)) : value;
 
         setApolice(prev => ({
             ...prev,
@@ -110,9 +118,10 @@ function FormApolice() {
 
     async function gerarNovaApolice(e: SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
+        setTentouEnviar(true);
 
-        if (!apolice.cliente?.id) {
-            ToastAlerta('Por favor, selecione um cliente válido!', 'info');
+        if (!apolice.cliente?.id || !apolice.plano || !apolice.preco || apolice.dependentes === undefined || String(apolice.dependentes) === '' || !apolice.data_inicio || !apolice.data_fim) {
+            ToastAlerta('Por favor, preencha todos os campos em vermelho!', 'erro');
             return;
         }
 
@@ -126,14 +135,18 @@ function FormApolice() {
                 ToastAlerta('Apólice cadastrada com sucesso!', 'sucesso');
             }
             navigate('/apolices');
-        } catch (error) {
-            ToastAlerta('Erro ao processar a Apólice.', 'erro');
+        } catch (error: any) {
+            if (error.toString().includes("401")) {
+                handleLogout();
+            } else {
+                ToastAlerta('Erro ao processar a Apólice.', 'erro');
+            }
         } finally {
             setIsLoading(false);
         }
     }
 
-    const inputClass = "border-2 border-slate-300 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full";
+    const inputClass = "border-2 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full";
     const labelClass = "font-semibold text-sky-900";
 
     const formContent = (
@@ -152,7 +165,7 @@ function FormApolice() {
                     <input
                         type="text"
                         placeholder="Digite o nome do cliente..."
-                        className={inputClass}
+                        className={`${inputClass} ${tentouEnviar && !apolice.cliente?.id ? "border-red-500" : "border-slate-300"}`}
                         value={buscaCliente}
                         onChange={(e) => {
                             setBuscaCliente(e.target.value);
@@ -190,7 +203,7 @@ function FormApolice() {
                     <label className={labelClass}>Plano</label>
                     <select
                         name="plano"
-                        className="border-2 border-slate-300 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full bg-white"
+                        className={`border-2 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full bg-white ${tentouEnviar && !apolice.plano ? "border-red-500" : "border-slate-300"}`}
                         onChange={atualizarEstado}
                         value={apolice.plano || ''}
                     >
@@ -213,7 +226,7 @@ function FormApolice() {
                             type="number"
                             name="preco"
                             placeholder="R$ 0,00"
-                            className={`${inputClass} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+                            className={`${inputClass} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${tentouEnviar && !apolice.preco ? "border-red-500" : "border-slate-300"}`}
                             onChange={atualizarEstado}
                             value={apolice.preco ?? ''}
                         />
@@ -223,7 +236,7 @@ function FormApolice() {
                         <input
                             type="number"
                             name="dependentes"
-                            className={`${inputClass} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none`}
+                            className={`${inputClass} [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none ${tentouEnviar && (apolice.dependentes === undefined || String(apolice.dependentes) === '') ? "border-red-500" : "border-slate-300"}`}
                             onChange={atualizarEstado}
                             value={apolice.dependentes ?? ''}
                         />
@@ -237,7 +250,7 @@ function FormApolice() {
                         <input
                             type="date"
                             name="data_inicio"
-                            className={inputClass}
+                            className={`${inputClass} ${tentouEnviar && !apolice.data_inicio ? "border-red-500" : "border-slate-300"}`}
                             onChange={atualizarEstado}
                             value={apolice.data_inicio || ''}
                         />
@@ -247,7 +260,7 @@ function FormApolice() {
                         <input
                             type="date"
                             name="data_fim"
-                            className={inputClass}
+                            className={`${inputClass} ${tentouEnviar && !apolice.data_fim ? "border-red-500" : "border-slate-300"}`}
                             onChange={atualizarEstado}
                             value={apolice.data_fim || ''}
                         />

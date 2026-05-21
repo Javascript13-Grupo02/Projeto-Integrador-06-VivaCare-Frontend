@@ -5,25 +5,40 @@ import {
   UserIcon,
 } from "@phosphor-icons/react";
 import { useState, type SyntheticEvent } from "react";
+import { ToastAlerta } from "../../utils/ToastAlerta";
 
 function FormContato() {
   const [enviado, setEnviado] = useState<boolean>(false);
+  const [tentouEnviar, setTentouEnviar] = useState<boolean>(false);
+
+  const [nome, setNome] = useState("");
+  const [email, setEmail] = useState("");
+  const [mensagem, setMensagem] = useState("");
 
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
+    setTentouEnviar(true);
+
+    if (!nome.trim() || !email.trim() || !mensagem.trim()) {
+      ToastAlerta("Os campos em vermelho devem ser preenchidos", "erro");
+      return; // Para a execução da função aqui e não envia o formulário
+    }
+
     const formData = new FormData(e.currentTarget);
 
     // chave de acesso ligada ao email do grupo
     formData.append("access_key", "dfcc3470-3019-4c65-a640-81488071f89f");
 
-    const response = await fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      body: formData,
-    });
-
-    const data = await response.json();
-
-    setEnviado(data.success ? true : false);
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await response.json();
+      setEnviado(data.success ? true : false);
+    } catch (error: any) {
+      ToastAlerta("Erro ao enviar a mensagem. Tente novamente mais tarde.", "erro");
+    }
   }
 
   return (
@@ -56,7 +71,9 @@ function FormContato() {
                 id="nome"
                 name="nome"
                 required
-                className="border-2 rounded-xl py-2 px-4 w-full md:w-6/10 bg-white  text-slate-800 focus:outline-none"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                className={`border-2 rounded-xl py-2 px-4 w-full md:w-6/10 bg-white text-slate-800 focus:outline-none ${tentouEnviar && !nome.trim() ? "border-red-500" : "border-slate-200"}`}
               />
             </div>
 
@@ -74,7 +91,9 @@ function FormContato() {
                 id="email"
                 name="email"
                 required
-                className="border-2 rounded-xl py-2 px-4 w-full md:w-7/10 bg-white text-slate-800 focus:outline-none"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`border-2 rounded-xl py-2 px-4 w-full md:w-7/10 bg-white text-slate-800 focus:outline-none ${tentouEnviar && !email.trim() ? "border-red-500" : "border-slate-200"}`}
               />
             </div>
 
@@ -91,7 +110,9 @@ function FormContato() {
                 id="mensagem"
                 name="mensagem"
                 required
-                className="border-2 border-slate-200 rounded-xl py-2.5 px-4 w-full md:w-9/10 bg-white text-slate-800 resize-none focus:outline-none"
+                value={mensagem}
+                onChange={(e) => setMensagem(e.target.value)}
+                className={`border-2 rounded-xl py-2.5 px-4 w-full md:w-9/10 bg-white text-slate-800 resize-none focus:outline-none ${tentouEnviar && !mensagem.trim() ? "border-red-500" : "border-slate-200"}`}
                 rows={5}
               />
 

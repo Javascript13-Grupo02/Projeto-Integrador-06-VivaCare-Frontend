@@ -45,6 +45,8 @@ function FormUsuario() {
     } catch (error: any) {
       if (error.toString().includes("401")) {
         handleLogout();
+      } else {
+        ToastAlerta("Erro ao buscar o usuário.", "erro");
       }
     }
   }
@@ -125,7 +127,11 @@ function FormUsuario() {
         await cadastrarUsuario(`/usuarios/cadastrar`, usuarioForm, setUsuarioForm);
         ToastAlerta("Usuário cadastrado com sucesso", "sucesso");
       } catch (error: any) {
-        ToastAlerta("Erro ao cadastrar o Usuário", "erro");
+        if (error.toString().includes("401")) {
+          handleLogout();
+        } else {
+          ToastAlerta("Erro ao cadastrar o Usuário", "erro");
+        }
       }
     }
 

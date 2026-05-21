@@ -17,8 +17,9 @@ function FormCliente() {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { id } = useParams<{ id: string }>();
+  const [tentouEnviar, setTentouEnviar] = useState<boolean>(false);
 
-  const { usuario, handleLogout } = useContext(AuthContext);
+  const { usuario, handleLogout, isLogout } = useContext(AuthContext);
   const token = usuario?.token || "";
 
   const [cliente, setCliente] = useState<Cliente>({
@@ -38,16 +39,20 @@ function FormCliente() {
     } catch (error: any) {
       if (error.toString().includes("401")) {
         handleLogout();
+      } else {
+        ToastAlerta("Erro ao buscar o Cliente.", "erro");
       }
     }
   }
 
   useEffect(() => {
     if (token === "") {
-      ToastAlerta("Você precisa estar logado", "info");
+      if (!isLogout) {
+        ToastAlerta("Você precisa estar logado", "info");
+      }
       navigate("/login");
     }
-  }, [token]);
+  }, [token, isLogout, navigate]);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -68,6 +73,12 @@ function FormCliente() {
 
   async function gerarNovoCliente(e: SyntheticEvent<HTMLFormElement>) {
     e.preventDefault();
+    setTentouEnviar(true);
+
+    if (!cliente.nome || !cliente.email || !cliente.telefone || !cliente.data_nascimento) {
+      ToastAlerta("Os campos em vermelho devem ser preenchidos", "erro");
+      return;
+    }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(cliente.email)) {
@@ -142,7 +153,7 @@ function FormCliente() {
   }
 
   const inputClass =
-    "border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 w-full";
+    "border-2 rounded-xl p-2 focus:outline-none focus:border-sky-800 w-full";
 
   const formContent = (
     <>
@@ -162,8 +173,7 @@ function FormCliente() {
             type="text"
             placeholder="Nome completo"
             name="nome"
-            required
-            className={inputClass}
+            className={`${inputClass} ${tentouEnviar && !cliente.nome ? "border-red-500" : "border-slate-300"}`}
             value={cliente.nome}
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />
@@ -177,8 +187,7 @@ function FormCliente() {
             type="email"
             placeholder="email@exemplo.com"
             name="email"
-            required
-            className={inputClass}
+            className={`${inputClass} ${tentouEnviar && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cliente.email) ? "border-red-500" : "border-slate-300"}`}
             value={cliente.email}
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />
@@ -192,8 +201,7 @@ function FormCliente() {
             type="text"
             placeholder="(21) 99999-9999"
             name="telefone"
-            required
-            className={inputClass}
+            className={`${inputClass} ${tentouEnviar && cliente.telefone.replace(/\D/g, "").length < 10 ? "border-red-500" : "border-slate-300"}`}
             value={cliente.telefone}
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />
@@ -209,8 +217,7 @@ function FormCliente() {
           <input
             type="date"
             name="data_nascimento"
-            required
-            className={inputClass}
+            className={`${inputClass} ${tentouEnviar && !cliente.data_nascimento ? "border-red-500" : "border-slate-300"}`}
             value={
               cliente.data_nascimento
                 ? cliente.data_nascimento.split("T")[0]
@@ -228,7 +235,7 @@ function FormCliente() {
             type="text"
             placeholder="Link da imagem do cliente"
             name="foto"
-            className={inputClass}
+            className={`${inputClass} border-slate-300`}
             value={cliente.foto}
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />

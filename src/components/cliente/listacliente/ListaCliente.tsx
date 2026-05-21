@@ -16,16 +16,18 @@ function ListaClientes() {
   // Mudança: Estado exclusivo para controlar o carregamento do botão de pesquisa
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  const { usuario, handleLogout } = useContext(AuthContext);
+  const { usuario, handleLogout, isLogout } = useContext(AuthContext);
   const token = usuario.token;
 
   // Segurança: se não tiver token, volta para o login
   useEffect(() => {
     if (token === "") {
-      ToastAlerta("Você precisa estar logado!", "info");
+      if (!isLogout) {
+        ToastAlerta("Você precisa estar logado!", "info");
+      }
       navigate("/login");
     }
-  }, [token]);
+  }, [token, isLogout, navigate]);
 
   // Busca os clientes assim que a tela carrega
   useEffect(() => {
@@ -42,8 +44,12 @@ function ListaClientes() {
       
       setIsSearching(true); 
       await buscar(`/clientes/nome/${nome}`, setClientes, { headers: { Authorization: token } });
-    } catch (error) {
-      console.error("Erro ao buscar clientes", error);
+    } catch (error: any) {
+      if (error.toString().includes("401")) {
+        handleLogout();
+      } else {
+        ToastAlerta("Erro ao buscar clientes", "erro");
+      }
     } finally {
    
       setIsSearching(false); 
@@ -61,8 +67,9 @@ function ListaClientes() {
     } catch (error: any) {
       if (error.toString().includes("401")) {
         handleLogout();
+      } else {
+        ToastAlerta("Erro ao carregar clientes.", "erro");
       }
-      console.error("Erro ao carregar clientes:", error);
     } finally {
       setIsLoading(false);
     }

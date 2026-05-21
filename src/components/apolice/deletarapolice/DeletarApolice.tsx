@@ -10,16 +10,18 @@ function DeletarApolice() {
   const navigate = useNavigate();
   const [apolice, setApolice] = useState<Apolice>({} as Apolice);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { usuario, handleLogout } = useContext(AuthContext);
+  const { usuario, handleLogout, isLogout } = useContext(AuthContext);
   const token = usuario.token;
   const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     if (token === '') {
-      ToastAlerta('Você precisa estar logado!', 'info')
+      if (!isLogout) {
+        ToastAlerta('Você precisa estar logado!', 'info')
+      }
       navigate('/')
     }
-  }, [token])
+  }, [token, isLogout, navigate])
 
   useEffect(() => {
     if (token !== '' && id !== undefined) {

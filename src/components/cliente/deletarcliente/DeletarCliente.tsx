@@ -11,7 +11,7 @@ function DeletarCliente() {
 
   const { id } = useParams<{ id: string }>();
 
-  const { usuario, handleLogout } = useContext(AuthContext);
+  const { usuario, handleLogout, isLogout } = useContext(AuthContext);
   const token = usuario?.token;
 
   const [cliente, setCliente] = useState<Cliente>({} as Cliente);
@@ -19,10 +19,12 @@ function DeletarCliente() {
 
   useEffect(() => {
     if (token === "") {
-      ToastAlerta("Você precisa estar logado para apagar um cliente", "info");
+      if (!isLogout) {
+        ToastAlerta("Você precisa estar logado para apagar um cliente", "info");
+      }
       navigate("/login");
     }
-  }, [token]);
+  }, [token, isLogout, navigate]);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -38,8 +40,9 @@ function DeletarCliente() {
     } catch (error: any) {
       if (error.toString().includes("401")) {
         handleLogout();
+      } else {
+        ToastAlerta("Cliente não encontrado!", "erro");
       }
-      ToastAlerta("Cliente não encontrado!", "erro");
       retornar();
     }
   }
