@@ -30,8 +30,8 @@ function FormContato() {
     // Conteiner externo
     <div className="flex items-center justify-center pb-4">
       <div
-        className="flex flex-col justify-center rounded-2xl bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-slate-200
-                                w-240 min-h-150 my-4 mx-4 px-4 py-4 md:px-8 md:py-8 shadow-2xl transition-all"
+        className="flex flex-col justify-center rounded-2xl bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 text-slate-200
+                                w-240 min-h-150 my-4 mx-4 px-4 py-4 md:px-8 md:py-8 shadow-2xl transition-all duration-500"
         id="formContato"
       >
         {!enviado ? (
@@ -40,7 +40,9 @@ function FormContato() {
             onSubmit={handleSubmit}
             className="flex flex-col columns-1 justify-start gap-4 md:mt-3 md:mb-8 md:mx-8 w-full"
           >
-            <h1 className="font-bold text-2xl md:text-3xl mt-2 mb-4 md:mt-8 md:mb-12 text-center md:text-left">Entre em contato</h1>
+            <h1 className="font-bold text-2xl md:text-3xl mt-2 mb-4 md:mt-8 md:mb-12 text-center md:text-left">
+              Entre em contato
+            </h1>
 
             {/* div de nome */}
             <div className="flex flex-col gap-1.5">
@@ -56,7 +58,7 @@ function FormContato() {
                 id="nome"
                 name="nome"
                 required
-                className="border-2 rounded-xl py-2 px-4 w-full md:w-6/10 bg-white  text-slate-800 focus:outline-none"
+                className="border-2 rounded-xl py-2 px-4 w-full md:w-6/10 bg-white text-slate-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 focus:outline-none transition-colors duration-300"
               />
             </div>
 
@@ -74,7 +76,7 @@ function FormContato() {
                 id="email"
                 name="email"
                 required
-                className="border-2 rounded-xl py-2 px-4 w-full md:w-7/10 bg-white text-slate-800 focus:outline-none"
+                className="border-2 rounded-xl py-2 px-4 w-full md:w-7/10 bg-white text-slate-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 focus:outline-none transition-colors duration-300"
               />
             </div>
 
@@ -91,7 +93,7 @@ function FormContato() {
                 id="mensagem"
                 name="mensagem"
                 required
-                className="border-2 border-slate-200 rounded-xl py-2.5 px-4 w-full md:w-9/10 bg-white text-slate-800 resize-none focus:outline-none"
+                className="border-2 border-slate-200 rounded-xl py-2.5 px-4 w-full md:w-9/10 bg-white text-slate-800 resize-none focus:outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 transition-colors duration-300"
                 rows={5}
               />
 
@@ -100,8 +102,8 @@ function FormContato() {
                 id="submit"
                 name="submit"
                 className="flex justify-center items-center leading-1.5 mt-2.5 w-full md:w-9/10 p-4
-                                    rounded-lg  text-slate-800 font-bold text-md bg-sky-200 
-                                    hover:bg-sky-600 hover:text-slate-200 inset-1 transition-all duration-300"
+                                    rounded-lg text-slate-800 dark:text-slate-100 font-bold text-md bg-sky-200 dark:bg-slate-700
+                                    hover:bg-sky-600 dark:hover:bg-slate-600 hover:text-slate-200 inset-1 transition-all duration-300"
               >
                 Enviar
               </button>
@@ -120,7 +122,7 @@ function FormContato() {
             </p>
             <button
               onClick={() => setEnviado(false)}
-              className="mt-6 text-sm underline text-sky-400 hover:text-sky-950 "
+              className="mt-6 text-sm underline text-sky-400 hover:text-sky-950 dark:hover:text-slate-300 transition-colors duration-300"
             >
               Enviar outra mensagem
             </button>

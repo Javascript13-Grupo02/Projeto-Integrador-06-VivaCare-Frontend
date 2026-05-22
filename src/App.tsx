@@ -16,7 +16,7 @@ import FormUsuario from "./pages/cadastro/Cadastro";
 import Perfil from "./pages/perfil/Perfil";
 import AtualizarPerfil from "./pages/perfil/AtualizarPerfil";
 import Footer from "./components/footer/Footer";
-
+import { useEffect } from "react";
 // function FundoClaro({ children }: { children: React.ReactNode }) {
 //   return (
 //     <div
@@ -34,70 +34,171 @@ import Footer from "./components/footer/Footer";
 //   )
 // }
 
+// function FundoListras({ children }: { children: React.ReactNode }) {
+// return (
+//   <div
+//     className="min-h-screen flex flex-col items-start justify-start py-16 px-4"
+//     // style={{
+//     //   backgroundImage: `
+//     //     repeating-linear-gradient(
+//     //       -45deg,
+//     //       transparent,
+//     //       transparent 20px,
+//     //       rgba(186,230,255,0.25) 20px,
+//     //       rgba(186,230,255,0.25) 21px
+//     //     ),
+//     //     linear-gradient(to bottom right, #ffffff, #e0f2fe)
+//     //   `
+//     // }}
+//     style={{
+//       backgroundImage: `
+//         repeating-linear-gradient(
+//           -45deg,
+//           transparent,
+//           transparent 7px,
+//           rgba(125,211,252,0.4) 7px,
+//           rgba(125,211,252,0.4) 8px
+//         ),
+//         linear-gradient(to bottom right, #f0f9ff, #bae6fd)
+//       `
+//     }}
+//   >
+//     {children}
+//   </div>
+// )
+
+// O FundoListras agora usa classe do Tailwind
 function FundoListras({ children }: { children: React.ReactNode }) {
   return (
-    <div
-      className="min-h-screen flex flex-col items-start justify-start py-16 px-4"
-      // style={{
-      //   backgroundImage: `
-      //     repeating-linear-gradient(
-      //       -45deg,
-      //       transparent,
-      //       transparent 20px,
-      //       rgba(186,230,255,0.25) 20px,
-      //       rgba(186,230,255,0.25) 21px
-      //     ),
-      //     linear-gradient(to bottom right, #ffffff, #e0f2fe)
-      //   `
-      // }}
-      style={{
-        backgroundImage: `
-          repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 7px,
-            rgba(125,211,252,0.4) 7px,
-            rgba(125,211,252,0.4) 8px
-          ),
-          linear-gradient(to bottom right, #f0f9ff, #bae6fd)
-        `
-      }}    
-    >
+    <div className="min-h-screen flex flex-col items-start justify-start py-16 px-4 bg-listras-claras dark:bg-none dark:bg-slate-900 transition-colors duration-300">
       {children}
     </div>
-  )
+  );
 }
-
+//Salva o tema que o usuário usou anteriormente
 function App() {
+  useEffect(() => {
+    const root = window.document.documentElement;
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, []);
   return (
     <BrowserRouter>
-    <AuthProvider>
-      <ToastContainer />
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />}/>
-        <Route path="/home" element={<Home />}/>
-        <Route path="/login" element={<Login />}/>
-        <Route path="/sobre" element={<FundoListras><Sobre /></FundoListras>}/>
-        <Route path="/equipe" element={<FundoListras><Equipe /></FundoListras>}/>
-        <Route path="/perfil" element={<FundoListras><Perfil /></FundoListras>}/>
-        <Route path="/atualizarusuario" element={<FundoListras><AtualizarPerfil/></FundoListras>}/>
-        <Route path="/apolices" element={<FundoListras><ListaApolices /></FundoListras>}/>
-        <Route path="/apolices/email/:email" element={<FundoListras><ListaApolices /></FundoListras>}/>
-        <Route path="/clientes" element={<FundoListras><ListaClientes /></FundoListras>}/>
-        <Route path="/cadastro" element={<FundoListras><FormUsuario/></FundoListras>}/>
-        <Route path="/deletarapolice/:id" element={<FundoListras><DeletarApolice/></FundoListras>}/>
-        <Route path="/cadastrarapolice" element={<FormApolice/>}/>
-        <Route path="/editarapolice/:id" element={<FundoListras><FormApolice /></FundoListras>}/>
-        <Route path="/deletarcliente/:id" element={<FundoListras><DeletarCliente/></FundoListras>}/>
-        <Route path="/cadastrarcliente" element={<FormCliente/>}/>
-        <Route path="/editarcliente/:id" element={<FundoListras><FormCliente /></FundoListras>}/>
-      </Routes>
-      <Footer/>
-    </AuthProvider>
+      <AuthProvider>
+        <ToastContainer />
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/sobre"
+            element={
+              <FundoListras>
+                <Sobre />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/equipe"
+            element={
+              <FundoListras>
+                <Equipe />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <FundoListras>
+                <Perfil />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/atualizarusuario"
+            element={
+              <FundoListras>
+                <AtualizarPerfil />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/apolices"
+            element={
+              <FundoListras>
+                <ListaApolices />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/apolices/email/:email"
+            element={
+              <FundoListras>
+                <ListaApolices />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/clientes"
+            element={
+              <FundoListras>
+                <ListaClientes />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/cadastro"
+            element={
+              <FundoListras>
+                <FormUsuario />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/deletarapolice/:id"
+            element={
+              <FundoListras>
+                <DeletarApolice />
+              </FundoListras>
+            }
+          />
+          <Route path="/cadastrarapolice" element={<FormApolice />} />
+          <Route
+            path="/editarapolice/:id"
+            element={
+              <FundoListras>
+                <FormApolice />
+              </FundoListras>
+            }
+          />
+          <Route
+            path="/deletarcliente/:id"
+            element={
+              <FundoListras>
+                <DeletarCliente />
+              </FundoListras>
+            }
+          />
+          <Route path="/cadastrarcliente" element={<FormCliente />} />
+          <Route
+            path="/editarcliente/:id"
+            element={
+              <FundoListras>
+                <FormCliente />
+              </FundoListras>
+            }
+          />
+        </Routes>
+        <Footer />
+      </AuthProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
-
+export default App;

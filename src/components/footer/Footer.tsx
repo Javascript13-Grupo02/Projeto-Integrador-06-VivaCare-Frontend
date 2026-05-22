@@ -5,7 +5,7 @@ function Footer() {
     const data = new Date().getFullYear()
 
     return (
-        <div className="flex justify-center bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-white">
+        <div className="flex justify-center bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-white dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
             <div className="container flex flex-col md:flex-row items-center justify-between py-4 px-6 gap-4">
 
                 {/* Copyright */}

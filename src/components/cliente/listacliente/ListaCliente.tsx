@@ -87,10 +87,11 @@ function ListaClientes() {
         className="flex flex-row w-full justify-center gap-0"
       >
         {/* Input */}
-        <div className="p-0.75 flex-1 max-w-xl rounded-l-[14px]"
-          style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}
-        >
-          <div className="bg-white rounded-l-[11px] h-full flex items-center gap-3 px-4">
+      
+        <div 
+  className="p-0.75 flex-1 max-w-xl rounded-l-[14px] bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 transition-colors duration-300"
+>
+          <div className="bg-white rounded-l-[11px] h-full flex items-center gap-3 px-4  dark:bg-slate-800 dark:text-slate-100">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
             </svg>
@@ -98,7 +99,7 @@ function ListaClientes() {
               type="search"
               name="busca-cliente"
               placeholder={window.innerWidth < 640 ? "Buscar cliente..." : "Digite o nome do cliente que deseja buscar"}
-              className="w-full bg-transparent outline-none text-slate-800 text-sm py-3 sm:py-3.5 placeholder:text-slate-400 sm:placeholder:text-sm"
+              className="w-full bg-transparent outline-none text-slate-800 text-sm py-3 sm:py-3.5 placeholder:text-slate-400 sm:placeholder:text-sm dark:text-white"
               style={{}}
               onChange={(e) => {
                 if (e.target.value === "") {

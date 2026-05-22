@@ -1,7 +1,19 @@
 import Popup from "reactjs-popup";
 import FormApolice from "../formapolice/FormApolice";
+import { useEffect, useState } from "react";
 
 function ModalApolice() {
+  const [isDark, setIsDark] = useState(
+    document.documentElement.classList.contains("dark"),
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+    observer.observe(document.documentElement, { attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
   return (
     <Popup
       trigger={
@@ -16,14 +28,14 @@ function ModalApolice() {
       }
       modal
       contentStyle={{
-        borderRadius: '1rem',
-        padding: '0',
-        background: '#ffffff',
-        border: '1px solid #e2e8f0',
-        width: '560px'
+        borderRadius: "1rem",
+        padding: "0",
+        background: isDark ? "#0f172a" : "#ffffff",
+        border: `1px solid ${isDark ? "#334155" : "#e2e8f0"}`,
+        width: "560px",
       }}
       overlayStyle={{
-        background: 'rgba(0,0,0,0.5)'
+        background: "rgba(0,0,0,0.5)",
       }}
     >
       <FormApolice />

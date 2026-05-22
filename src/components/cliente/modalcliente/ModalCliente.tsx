@@ -1,7 +1,20 @@
 import Popup from "reactjs-popup";
 import FormCliente from "../formcliente/FormCliente";
+import { useEffect, useState } from "react";
 
 function ModalCliente() {
+  const [isDark, setIsDark] = useState(
+    document.documentElement.classList.contains('dark')
+  );
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(document.documentElement.classList.contains('dark'));
+    });
+    observer.observe(document.documentElement, { attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <Popup
       trigger={
@@ -18,8 +31,8 @@ function ModalCliente() {
       contentStyle={{
         borderRadius: '1rem',
         padding: '0',
-        background: '#ffffff',
-        border: '1px solid #e2e8f0',
+        background: isDark ? '#0f172a' : '#ffffff',
+        border: `1px solid ${isDark ? '#334155' : '#e2e8f0'}`,
         width: '560px'
       }}
       overlayStyle={{
