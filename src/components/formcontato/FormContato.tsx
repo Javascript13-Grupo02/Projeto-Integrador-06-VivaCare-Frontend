@@ -37,7 +37,10 @@ function FormContato() {
       const data = await response.json();
       setEnviado(data.success ? true : false);
     } catch (error: any) {
-      ToastAlerta("Erro ao enviar a mensagem. Tente novamente mais tarde.", "erro");
+      ToastAlerta(
+        "Erro ao enviar a mensagem. Tente novamente mais tarde.",
+        "erro",
+      );
     }
   }
 
@@ -73,10 +76,9 @@ function FormContato() {
                 id="nome"
                 name="nome"
                 required
-                className="border-2 rounded-xl py-2 px-4 w-full md:w-6/10 bg-white text-slate-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 focus:outline-none transition-colors duration-300"
                 value={nome}
                 onChange={(e) => setNome(e.target.value)}
-                className={`border-2 rounded-xl py-2 px-4 w-full md:w-6/10 bg-white text-slate-800 focus:outline-none ${tentouEnviar && !nome.trim() ? "border-red-500" : "border-slate-200"}`}
+                className={`border-2 rounded-xl py-2 px-4 w-full md:w-6/10 bg-white text-slate-800 focus:outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 transition-colors duration-300 ${tentouEnviar && !nome.trim() ? "border-red-500" : "border-slate-200"}`}
               />
             </div>
 
@@ -94,10 +96,9 @@ function FormContato() {
                 id="email"
                 name="email"
                 required
-                className="border-2 rounded-xl py-2 px-4 w-full md:w-7/10 bg-white text-slate-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 focus:outline-none transition-colors duration-300"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`border-2 rounded-xl py-2 px-4 w-full md:w-7/10 bg-white text-slate-800 focus:outline-none ${tentouEnviar && !email.trim() ? "border-red-500" : "border-slate-200"}`}
+                className={`border-2 rounded-xl py-2 px-4 w-full md:w-7/10 bg-white text-slate-800 focus:outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 transition-colors duration-300 ${tentouEnviar && !email.trim() ? "border-red-500" : "border-slate-200"}`}
               />
             </div>
 
@@ -114,10 +115,9 @@ function FormContato() {
                 id="mensagem"
                 name="mensagem"
                 required
-                className="border-2 border-slate-200 rounded-xl py-2.5 px-4 w-full md:w-9/10 bg-white text-slate-800 resize-none focus:outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 transition-colors duration-300"
                 value={mensagem}
                 onChange={(e) => setMensagem(e.target.value)}
-                className={`border-2 rounded-xl py-2.5 px-4 w-full md:w-9/10 bg-white text-slate-800 resize-none focus:outline-none ${tentouEnviar && !mensagem.trim() ? "border-red-500" : "border-slate-200"}`}
+                className={`border-2 rounded-xl py-2.5 px-4 w-full md:w-9/10 bg-white text-slate-800 resize-none focus:outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 transition-colors duration-300 ${tentouEnviar && !mensagem.trim() ? "border-red-500" : "border-slate-200"}`}
                 rows={5}
               />
 
