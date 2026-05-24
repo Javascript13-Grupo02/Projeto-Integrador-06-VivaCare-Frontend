@@ -166,6 +166,7 @@ const inputClass =
 
       <form
         className="flex flex-col w-full max-w-lg gap-4 bg-white p-8 rounded-2xl shadow-xl border border-sky-200 mx-auto dark:bg-slate-900  "
+        onSubmit={gerarNovoCliente}
       >
         <div className="flex flex-col gap-2">
           <label htmlFor="nome" className="font-semibold text-sky-900 dark:text-slate-100 ">
