@@ -3,13 +3,13 @@ function Sobre() {
     <div className="flex flex-col items-center w-full">
       <div className="max-w-7xl mx-auto space-y-16">
         <div className="text-center space-y-8">
-          <h1 className="text-3xl md:text-5xl font-bold  text-slate-950">
+          <h1 className="text-3xl md:text-5xl font-bold text-slate-950  dark:text-slate-100">
             VivaCare
           </h1>
-          <h2 className="text-2xl md:text-4xl font-bold  text-slate-950">
+          <h2 className="text-2xl md:text-4xl font-bold  text-slate-950 dark:text-slate-100">
             Mais que cuidado, uma parceria de vida
           </h2>
-          <p className="text-2xl font-medium leading-snug text-slate-950">
+          <p className="text-2xl font-medium leading-snug text-slate-950 dark:text-slate-100">
             Segurança hoje e a tranquilidade que sua família merece para o
             futuro.
           </p>
@@ -20,10 +20,15 @@ function Sobre() {
             <img
               src="https://ik.imagekit.io/vjqejp2vh/VivaCare/Logo%20VivaCare%20Escura.png?updatedAt=1777032056085"
               alt="Logo VivaCare"
-              className="w-64 md:w-80 h-auto drop-shadow-lg mb-8"
+              className="block dark:hidden w-64 md:w-80 h-auto drop-shadow-lg mb-8"
+            />
+            <img
+              src="https://ik.imagekit.io/vjqejp2vh/VivaCare/Logo%20VivaCare%20Clara.png?updatedAt=1777032061555"
+              alt="Logo VivaCare"
+              className="hidden dark:block w-64 md:w-80 h-auto drop-shadow-lg mb-8"
             />
 
-            <div className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 p-10 md:p-14 rounded-3xl shadow-md shadow-black/80 text-center w-full mt-auto">
+            <div className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-10 md:p-14 rounded-3xl shadow-md shadow-black/80 text-center w-full mt-auto">
               <h3 className="text-3xl font-bold mb-6 text-slate-100">
                 Nossa Missão
               </h3>
@@ -37,7 +42,7 @@ function Sobre() {
           </div>
 
           <div className="flex flex-col w-full h-full">
-            <div className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800  p-10 md:p-14 rounded-3xl shadow-md shadow-black/80 mt-auto">
+            <div className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 p-10 md:p-14 rounded-3xl shadow-md shadow-black/80 mt-auto">
               <h3 className="text-3xl font-bold mb-6  text-slate-100  text-center">
                 Funcionalidades do Projeto
               </h3>

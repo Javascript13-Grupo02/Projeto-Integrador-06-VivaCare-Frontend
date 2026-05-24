@@ -103,10 +103,10 @@ function AtualizarPerfil() {
       <div className="w-full max-w-2xl">
 
         {/* Card */}
-        <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-200">
+        <div className="bg-white rounded-2xl overflow-hidden shadow-lg border border-slate-200 dark:bg-slate-900">
 
           {/* Capa */}
-          <div className="relative h-40 bg-linear-to-r from-sky-950 via-sky-800 to-sky-500">
+          <div className="relative h-40 bg-linear-to-r from-sky-950 via-sky-800 to-sky-500 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
             <div
               className="absolute inset-0 opacity-10"
               style={{
@@ -132,15 +132,15 @@ function AtualizarPerfil() {
           {/* Formulário */}
           <div className="px-8 pb-8 pt-4">
 
-            <h1 className="text-2xl font-bold text-sky-900 text-center mb-1">{user.nome}</h1>
-            <p className="text-slate-500 text-sm text-center mb-6">{user.usuario}</p>
+            <h1 className="text-2xl font-bold text-sky-900 text-center mb-1 dark:text-slate-100">{user.nome}</h1>
+            <p className="text-slate-500 text-sm text-center mb-6 dark:text-slate-200">{user.usuario}</p>
 
             <div className="w-full h-px bg-slate-200 mb-6" />
 
             <form onSubmit={atualizarUsuario} className="flex flex-col gap-4">
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="nome" className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                <label htmlFor="nome" className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-100">
                   Nome
                 </label>
                 <input
@@ -149,14 +149,14 @@ function AtualizarPerfil() {
                   name="nome"
                   placeholder="Nome completo"
                   required
-                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors"
+                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
                   value={user.nome || ""}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="usuario" className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                <label htmlFor="usuario" className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-100">
                   E-mail
                 </label>
                 <input
@@ -164,13 +164,13 @@ function AtualizarPerfil() {
                   id="usuario"
                   name="usuario"
                   disabled
-                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 text-slate-400 cursor-not-allowed"
+                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm bg-slate-50 text-slate-400 cursor-not-allowed dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
                   value={user.usuario || ""}
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="foto" className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                <label htmlFor="foto" className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-100">
                   URL da Foto
                 </label>
                 <input
@@ -179,14 +179,14 @@ function AtualizarPerfil() {
                   name="foto"
                   placeholder="Link da imagem"
                   required
-                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors"
+                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
                   value={user.foto || ""}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="senha" className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                <label htmlFor="senha" className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-100">
                   Nova Senha
                 </label>
                 <input
@@ -195,14 +195,14 @@ function AtualizarPerfil() {
                   name="senha"
                   placeholder="Deixe em branco para manter a atual ou digite uma nova senha"
                   minLength={8}
-                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors"
+                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
                   value={user.senha || ""}
                   onChange={(e) => atualizarEstado(e)}
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
-                <label htmlFor="confirmarSenha" className="text-xs font-semibold uppercase tracking-widest text-slate-400">
+                <label htmlFor="confirmarSenha" className="text-xs font-semibold uppercase tracking-widest text-slate-400 dark:text-slate-100 ">
                   Confirmar Senha
                 </label>
                 <input
@@ -211,7 +211,7 @@ function AtualizarPerfil() {
                   name="confirmarSenha"
                   placeholder="Repita a nova senha"
                   minLength={8}
-                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors"
+                  className="border-2 border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-sky-800 transition-colors dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 "
                   value={confirmarSenha}
                   onChange={(e: ChangeEvent<HTMLInputElement>) => setConfirmarSenha(e.target.value)}
                 />
@@ -221,14 +221,14 @@ function AtualizarPerfil() {
                 <button
                   type="button"
                   onClick={retornar}
-                  className="flex-1 py-3 rounded-xl border-2 border-slate-200 text-slate-600 text-sm font-semibold uppercase tracking-widest hover:bg-slate-50 transition-colors duration-200"
+                  className="flex-1 py-3 rounded-xl border-2 border-slate-200 text-slate-600 text-sm font-semibold uppercase tracking-widest hover:bg-slate-50 transition-colors duration-200 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 dark:hover:bg-slate-700"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="flex-1 py-3 rounded-xl bg-sky-800 hover:bg-sky-900 text-white text-sm font-semibold uppercase tracking-widest flex justify-center transition-colors duration-200 disabled:opacity-50"
+                  className="flex-1 py-3 rounded-xl  bg-sky-800 hover:bg-sky-900 text-white text-sm font-semibold uppercase tracking-widest flex justify-center transition-colors duration-200 disabled:opacity-50 dark:border-2 dark:border-slate-200 dark:text-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600 "
                 >
                   {isLoading
                     ? <ClipLoader color="#ffffff" size={16} />

@@ -12,6 +12,8 @@ import {
   UserIcon,
   SignOutIcon,
   SignInIcon,
+  SunIcon,
+  MoonIcon,
 } from "@phosphor-icons/react";
 
 function Navbar() {
@@ -21,6 +23,24 @@ function Navbar() {
 
   // Estado do Menu Mobile
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem("theme") || "light";
+  });
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+
+    const root = window.document.documentElement;
+    if (newTheme === "dark") {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+
+    localStorage.setItem("theme", newTheme);
+  };
 
   function logout() {
     handleLogout();
@@ -33,7 +53,8 @@ function Navbar() {
   let componentLogin: ReactNode;
 
   component = (
-    <div className="w-full flex justify-center py-4 bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-white">
+    <div className="w-full flex justify-center py-4 bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 text-slate-200 relative z-40 shadow-md transition-colors duration-500">
+      {" "}
       <div className="container flex justify-between text-base sm:text-lg mx-8">
         <Link to="/home" className="text-xl sm:text-2xl font-bold">
           <div className="flex gap-0.5 sm:gap-2">
@@ -46,7 +67,17 @@ function Navbar() {
           </div>
         </Link>
 
-        <div className="hidden md:flex  gap-1 sm:gap-4">
+        <div className="hidden md:flex items-center gap-1 sm:gap-4">
+          <button
+            onClick={toggleTheme}
+            className="ml-4 p-2 rounded-full hover:bg-sky-800 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            {theme === "dark" ? (
+              <SunIcon size={24} weight="bold" className="text-yellow-400" />
+            ) : (
+              <MoonIcon size={24} weight="bold" />
+            )}
+          </button>
           <Link to="/sobre" className="hover:text-[#45a8f0] transition-colors">
             Sobre
           </Link>
@@ -70,7 +101,8 @@ function Navbar() {
   );
 
   componentLogin = (
-    <div className="w-full flex justify-center py-4 bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-white">
+    <div className="w-full flex justify-center py-4 bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800 text-white relative z-40 shadow-md transition-colors duration-500">
+      {" "}
       <div className="container flex justify-between text-base sm:text-lg mx-8">
         <Link to="/home" className="text-xl sm:text-2xl font-bold">
           <div className="flex gap-0.5 sm:gap-2">
@@ -83,7 +115,17 @@ function Navbar() {
           </div>
         </Link>
 
-        <div className="hidden md:flex gap-1 sm:gap-4">
+        <div className="hidden md:flex items-center gap-1 sm:gap-4">
+          <button
+            onClick={toggleTheme}
+            className="ml-4 p-2 rounded-full hover:bg-sky-800 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            {theme === "dark" ? (
+              <SunIcon size={24} weight="bold" className="text-yellow-400" />
+            ) : (
+              <MoonIcon size={24} weight="bold" />
+            )}
+          </button>
           <Link
             to="/apolices"
             className="hover:text-[#45a8f0] transition-colors hidden sm:flex gap-4"
@@ -141,11 +183,21 @@ function Navbar() {
       )}
 
       <div
-        className={`fixed top-0 right-0 h-full w-64 bg-sky-950 text-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden flex flex-col ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+        className={`fixed top-0 right-0 h-full w-64 bg-sky-950 dark:bg-slate-900 text-white  shadow-2xl z-50 transform transition-transform duration-300 ease-in-out md:hidden flex flex-col ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
       >
         {/* Cabeçalho do menu */}
         <div className="flex justify-between items-center p-6 border-b border-sky-800">
           <span className="text-xl font-bold">Menu</span>
+          <button
+            onClick={toggleTheme}
+            className="ml-4 p-2 rounded-full hover:bg-sky-800 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+          >
+            {theme === "dark" ? (
+              <SunIcon size={24} weight="bold" className="text-yellow-400" />
+            ) : (
+              <MoonIcon size={24} weight="bold" />
+            )}
+          </button>
           <button
             onClick={() => setIsMenuOpen(false)}
             className="p-1 rounded-md hover:bg-sky-800 transition-colors cursor-pointer"

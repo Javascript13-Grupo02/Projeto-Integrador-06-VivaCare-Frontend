@@ -66,16 +66,16 @@ function DeletarApolice() {
 
         {/* Título */}
         <div className="text-center">
-          <h1 className="text-2xl font-extrabold text-slate-950 tracking-tight">
+          <h1 className="text-2xl font-extrabold text-slate-950 dark:text-slate-100 tracking-tight">
             Deletar Apólice
           </h1>
-          <p className="text-slate-600 mt-1">
+          <p className="text-slate-600 dark:text-slate-200 mt-1">
             Tem certeza que deseja deletar esta apólice?
           </p>
         </div>
 
         {/* Card */}
-        <div className="rounded-2xl overflow-hidden bg-sky-900 shadow-[0_8px_32px_rgba(0,0,0,0.3)]">
+        <div className="rounded-2xl overflow-hidden bg-sky-900 shadow-[0_8px_32px_rgba(0,0,0,0.3)] dark:bg-slate-900">
 
           <div className="h-0.5 bg-linear-to-r from-sky-400 to-transparent" />
 

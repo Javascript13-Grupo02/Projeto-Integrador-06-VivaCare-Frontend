@@ -146,17 +146,17 @@ function FormApolice() {
         }
     }
 
-    const inputClass = "border-2 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full";
-    const labelClass = "font-semibold text-sky-900";
+    const inputClass = "border-2 border-slate-300 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full bg-white text-slate-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 transition-colors duration-300";
+    const labelClass = "font-semibold text-sky-900 dark:text-slate-100";
 
     const formContent = (
         <>
-            <h1 className="text-3xl text-sky-800 text-center font-bold mb-8">
+            <h1 className="text-3xl text-sky-800 text-center font-bold mb-8 dark:text-slate-100">
                 {id !== undefined ? 'Editar Apólice' : 'Cadastrar Apólice'}
             </h1>
 
             <form
-                className="flex flex-col gap-5 w-full max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-sky-200"
+                className="flex flex-col gap-5 w-full max-w-xl mx-auto bg-white p-8 rounded-2xl shadow-xl border border-sky-200 dark:bg-slate-900 dark:text-slate-100"
                 onSubmit={gerarNovaApolice}
             >
                 {/* Busca de Cliente */}
@@ -191,10 +191,10 @@ function FormApolice() {
 
                 {/* Cliente confirmado */}
                 {apolice.cliente?.id && (
-                    <div className="bg-sky-50 p-4 rounded-xl flex flex-col gap-1 border border-sky-200">
-                        <p className="text-xs text-sky-800 font-bold uppercase">Cliente Vinculado:</p>
-                        <p className="font-semibold text-sky-900">{apolice.cliente.nome}</p>
-                        <p className="text-sm text-gray-500">{apolice.cliente.email}</p>
+                    <div className="bg-sky-50 p-4 rounded-xl flex flex-col gap-1 border border-sky-200 dark:bg-slate-800 dark:border-slate-600">
+                        <p className="text-xs text-sky-800 font-bold uppercase dark:text-sky-400">Cliente Vinculado:</p>
+                        <p className="font-semibold text-sky-900 dark:text-slate-100">{apolice.cliente.nome}</p>
+                        <p className="text-sm text-gray-500 dark:text-slate-400">{apolice.cliente.email}</p>
                     </div>
                 )}
 
@@ -203,7 +203,7 @@ function FormApolice() {
                     <label className={labelClass}>Plano</label>
                     <select
                         name="plano"
-                        className={`border-2 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full bg-white ${tentouEnviar && !apolice.plano ? "border-red-500" : "border-slate-300"}`}
+                        className="border-2 border-slate-300 rounded-xl p-3 focus:outline-none focus:border-sky-800 w-full bg-white text-slate-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 transition-colors duration-300"
                         onChange={atualizarEstado}
                         value={apolice.plano || ''}
                     >
@@ -212,9 +212,9 @@ function FormApolice() {
                             <option key={plano} value={plano}>{plano}</option>
                         ))}
                     </select>
-                    <div className="bg-sky-50 p-4 rounded-xl flex flex-col gap-1 border border-sky-200">
-                            <p className="text-xs text-sky-800 font-bold uppercase">Plano selecionado:</p>
-                            <p className="font-semibold text-sky-900">{apolice.plano}</p>
+                    <div className="bg-sky-50 p-4 rounded-xl flex flex-col gap-1 border border-sky-200 dark:bg-slate-800 dark:border-slate-600">
+                            <p className="text-xs text-sky-800 font-bold uppercase dark:text-sky-400">Plano selecionado:</p>
+                            <p className="font-semibold text-sky-900 dark:text-slate-100">{apolice.plano}</p>
                     </div>
                 </div>
 
@@ -269,7 +269,7 @@ function FormApolice() {
 
                 <button
                     type="submit"
-                    className="mt-2 bg-sky-800 text-white font-bold py-3 rounded-xl hover:bg-sky-900 transition-colors flex justify-center"
+                    className="mt-2 bg-sky-800 text-white font-bold py-3 rounded-xl hover:bg-sky-900 transition-colors flex justify-center dark:border dark:border-slate-200  dark:bg-slate-700 dark:hover:bg-slate-600"
                 >
                     {isLoading ? <ClipLoader size={20} color="#fff" /> : (id ? 'Atualizar' : 'Cadastrar')}
                 </button>
@@ -279,14 +279,14 @@ function FormApolice() {
 
     if (id !== undefined) {
         return (
-            <div className="min-h-screen flex flex-col items-center py-16 px-4 w-full">
+            <div className="min-h-screen flex flex-col items-center py-16 px-4 w-full dark:bg-transparent">
                 {formContent}
             </div>
         );
     }
 
     return (
-        <div className="flex flex-col items-center px-4 py-4 w-full">
+        <div className="flex flex-col items-center px-4 py-4 w-full dark:bg-transparent">
             {formContent}
         </div>
     );

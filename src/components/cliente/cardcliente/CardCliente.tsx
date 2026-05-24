@@ -19,7 +19,7 @@ function CardCliente({ cliente }: CardClienteProps) {
 
 
   return (
-    <div className="flex flex-col rounded-2xl overflow-hidden bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.4)] transition-all duration-300">
+    <div className="flex flex-col rounded-2xl overflow-hidden bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:-translate-y-1 hover:shadow-[0_16px_40px_rgba(0,0,0,0.4)] transition-all duration-300 dark:from-slate-950 dark:via-slate-900 dark:to-slate-800">
 
       <div className="h-0.5 bg-linear-to-r from-sky-400 to-transparent" />
 

@@ -56,12 +56,12 @@ function Login() {
       <div className="absolute inset-0 bg-sky-950/60" />
 
       {/* Card de login */}
-      <div className="relative z-10 bg-white rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.3)] p-10 w-full max-w-sm flex flex-col gap-5 mx-4">
+      <div className="relative z-10 bg-white rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.3)] p-10 w-full max-w-sm flex flex-col gap-5 mx-4 dark:bg-slate-900 ">
 
         {/* Header */}
         <div className="flex flex-col gap-2 text-center">
-          <h1 className="text-3xl font-extrabold text-sky-900">VivaCare</h1>
-          <p className="text-sm text-slate-500">Mais que cuidado, uma parceria de vida</p>
+          <h1 className="text-3xl font-extrabold text-sky-900 dark:text-slate-100">VivaCare</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-100">Mais que cuidado, uma parceria de vida</p>
         </div>
 
         <div className="h-px bg-slate-200" />
@@ -70,7 +70,7 @@ function Login() {
 
           {/* Usuário */}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="usuario" className="text-xs font-semibold text-sky-900 uppercase tracking-widest">
+            <label htmlFor="usuario" className="text-xs font-semibold text-sky-900 uppercase tracking-widest dark:text-slate-100">
               Usuário
             </label>
             <div className="p-0.5 rounded-xl" style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}>
@@ -79,7 +79,7 @@ function Login() {
                 id="usuario"
                 name="usuario"
                 placeholder="seu@email.com"
-                className="w-full px-4 py-2.5 rounded-[10px] bg-white text-slate-800 text-sm outline-none"
+                className="w-full px-4 py-2.5 rounded-[10px] bg-white text-slate-800 text-sm outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
                 value={usuarioLogin.usuario}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
               />
@@ -88,7 +88,7 @@ function Login() {
 
           {/* Senha */}
           <div className="flex flex-col gap-1.5">
-            <label htmlFor="senha" className="text-xs font-semibold text-sky-900 uppercase tracking-widest">
+            <label htmlFor="senha" className="text-xs font-semibold text-sky-900 uppercase tracking-widest dark:text-slate-100">
               Senha
             </label>
             <div className="p-0.5 rounded-xl" style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}>
@@ -97,7 +97,7 @@ function Login() {
                 id="senha"
                 name="senha"
                 placeholder="••••••••"
-                className="w-full px-4 py-2.5 rounded-[10px] bg-white text-slate-800 text-sm outline-none"
+                className="w-full px-4 py-2.5 rounded-[10px] bg-white text-slate-800 text-sm outline-none dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
                 value={usuarioLogin.senha}
                 onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
               />
@@ -107,7 +107,7 @@ function Login() {
           {/* Botão */}
           <button
             type="submit"
-            className="w-full py-3 rounded-xl text-white font-bold text-sm hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 flex justify-center"
+            className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 w-full py-3 rounded-xl text-white font-bold text-sm hover:-translate-y-0.5 hover:shadow-lg transition-all duration-300 flex justify-center  items-center dark:from-slate-950 dark:via-slate-900 dark:to-slate-800  "
             style={{ background: 'linear-gradient(to right, #0c4a6e, #075985, #0369a1)' }}
           >
             {isLoading
@@ -120,7 +120,7 @@ function Login() {
 
         <div className="h-px bg-slate-200" />
 
-        <p className="text-center text-sm text-slate-500">
+        <p className="text-center text-sm text-slate-500 dark:text-slate-100">
           Ainda não tem uma conta?{' '}
           <Link to="/cadastro" className="text-sky-700 font-semibold hover:underline">
             Cadastre-se

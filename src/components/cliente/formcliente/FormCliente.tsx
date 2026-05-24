@@ -152,21 +152,23 @@ function FormCliente() {
     retornar();
   }
 
-  const inputClass =
-    "border-2 rounded-xl p-2 focus:outline-none focus:border-sky-800 w-full";
+  // const inputClass =
+  //  "border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 w-full";
+
+const inputClass =
+    "border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 w-full bg-white text-slate-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100 transition-colors duration-300";
 
   const formContent = (
     <>
-      <h1 className="text-4xl text-center font-bold text-sky-800 my-8">
+      <h1 className="text-4xl text-center font-bold text-sky-800 dark:text-slate-100 mb-8">
         {id !== undefined ? "Editar Cliente" : "Cadastrar Cliente"}
       </h1>
 
       <form
-        className="flex flex-col w-full max-w-lg gap-4 bg-white p-8 rounded-2xl shadow-xl border border-sky-200 mx-auto"
-        onSubmit={gerarNovoCliente}
+        className="flex flex-col w-full max-w-lg gap-4 bg-white p-8 rounded-2xl shadow-xl border border-sky-200 mx-auto dark:bg-slate-900  "
       >
         <div className="flex flex-col gap-2">
-          <label htmlFor="nome" className="font-semibold text-sky-900">
+          <label htmlFor="nome" className="font-semibold text-sky-900 dark:text-slate-100 ">
             Nome do Cliente
           </label>
           <input
@@ -180,7 +182,7 @@ function FormCliente() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="email" className="font-semibold text-sky-900">
+          <label htmlFor="email" className="font-semibold text-sky-900 dark:text-slate-100">
             E-mail
           </label>
           <input
@@ -194,7 +196,7 @@ function FormCliente() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="telefone" className="font-semibold text-sky-900">
+          <label htmlFor="telefone" className="font-semibold text-sky-900 dark:text-slate-100 ">
             Telefone
           </label>
           <input
@@ -210,7 +212,7 @@ function FormCliente() {
         <div className="flex flex-col gap-2">
           <label
             htmlFor="data_nascimento"
-            className="font-semibold text-sky-900"
+            className="font-semibold text-sky-900 dark:text-slate-100"
           >
             Data de Nascimento
           </label>
@@ -228,7 +230,7 @@ function FormCliente() {
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="foto" className="font-semibold text-sky-900">
+          <label htmlFor="foto" className="font-semibold text-sky-900 dark:text-slate-100">
             URL da Foto (Opcional)
           </label>
           <input
@@ -243,7 +245,7 @@ function FormCliente() {
 
         <button
           type="submit"
-          className="rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold w-full py-3 mt-4 flex justify-center transition-colors"
+          className="rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold w-full py-3 mt-4 flex justify-center transition-colors dark:border dark:border-slate-200  dark:bg-slate-700 dark:hover:bg-slate-600"
         >
           {isLoading ? (
             <ClipLoader color="#ffffff" size={24} />
@@ -260,7 +262,7 @@ function FormCliente() {
   // Página solo (edição)
   if (id !== undefined) {
     return (
-      <div className="min-h-screen flex flex-col items-center py-16 px-4 w-full">
+      <div className="min-h-screen flex flex-col items-center py-16 px-4 w-full dark:bg-transparent">
         {formContent}
       </div>
     );
@@ -268,7 +270,7 @@ function FormCliente() {
 
   // Modal (cadastro)
   return (
-    <div className="flex flex-col items-center px-4 py-4 w-full">
+    <div className="flex flex-col items-center px-4 py-4 w-full dark:bg-transparent">
       {formContent}
     </div>
   );

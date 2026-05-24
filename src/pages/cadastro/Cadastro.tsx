@@ -144,11 +144,11 @@ function FormUsuario() {
     <div className="container flex flex-col columns-1 mx-auto items-center mt-10">
 
     {!formVisivel && (
-      <div className="bg-white rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.3)] p-10 w-full max-w-sm flex flex-col gap-5 mx-4">
+      <div className="bg-white rounded-2xl shadow-[0_24px_48px_rgba(0,0,0,0.3)] p-10 w-full max-w-sm flex flex-col gap-5 mx-4 dark:bg-slate-900">
 
         <div className="flex flex-col gap-2 text-center">
-          <h1 className="text-3xl font-extrabold text-sky-900">VivaCare</h1>
-          <p className="text-sm text-slate-500">Como deseja se cadastrar?</p>
+          <h1 className="text-3xl font-extrabold text-sky-900 dark:text-slate-100">VivaCare</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-100">Como deseja se cadastrar?</p>
         </div>
 
         <div className="h-px bg-slate-200" />
@@ -159,17 +159,17 @@ function FormUsuario() {
           <button
             type="button"
             onClick={() => registrarTipoUsuario("cliente")}
-            className="w-full border-2 border-sky-900 rounded-xl text-left hover:bg-sky-50 transition-all duration-300"
+            className="w-full border-2 border-sky-900 rounded-xl text-left hover:bg-sky-50 transition-all duration-300 "
           >
             <div className="flex items-center gap-4 p-5">
-              <div className="w-11 h-11 rounded-full bg-sky-100 flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-full bg-sky-100 flex items-center justify-center shrink-0 ">
                 <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-sky-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
                 </svg>
               </div>
               <div className="flex-1">
-                <p className="text-sm font-bold text-sky-900">Novo Cliente</p>
-                <p className="text-xs text-sky-700">Quero consultar minhas apólices</p>
+                <p className="text-sm font-bold text-sky-900 dark:text-slate-100">Novo Cliente</p>
+                <p className="text-xs text-sky-700 dark:text-slate-100">Quero consultar minhas apólices</p>
               </div>
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-sky-900" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14M13 6l6 6-6 6"/>
@@ -191,7 +191,7 @@ function FormUsuario() {
                 </svg>
               </div>
               <div className="flex-1">
-                <p className="text-sm font-bold text-white">Novo Corretor</p>
+                <p className="text-sm font-bold text-white ">Novo Corretor</p>
                 <p className="text-xs text-white/70">Quero gerenciar apólices</p>
               </div>
               <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white/80" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -204,7 +204,7 @@ function FormUsuario() {
 
         <div className="h-px bg-slate-200" />
 
-        <p className="text-center text-sm text-slate-500">
+        <p className="text-center text-sm text-slate-500 dark:text-slate-100">
           Já tem uma conta?{' '}
           <Link to="/login" className="text-sky-700 font-semibold hover:underline">
             Entrar
@@ -216,13 +216,13 @@ function FormUsuario() {
 
     {formVisivel && (
       <>
-      <h1 className="text-4xl text-center font-bold text-sky-800 my-8">
+      <h1 className="text-4xl text-center font-bold text-sky-800 my-8 dark:text-slate-100">
         {id !== undefined ? "Editar" : "Cadastrar"}{" "}
         {/* @ts-ignore */}
         {usuarioForm.roles === "corretor" ? "Corretor" : "Cliente"}
       </h1>
       <form
-        className="flex flex-col w-full max-w-lg gap-4 bg-white p-8 rounded-2xl shadow-xl border border-sky-200"
+        className="flex flex-col w-full max-w-lg gap-4 bg-white p-8 rounded-2xl shadow-xl border border-slate-200 dark:bg-slate-900"
         onSubmit={gerarNovoUsuario}
       >
         {/* Input field 'roles' com a propriedade hidden */}
@@ -233,7 +233,7 @@ function FormUsuario() {
               value={usuarioForm.roles || ""}
             />
         <div className="flex flex-col gap-2">
-          <label htmlFor="nome" className="font-semibold text-sky-900">
+          <label htmlFor="nome" className="font-semibold text-sky-900 dark:text-slate-100  ">
             Nome completo
           </label>
           <input
@@ -241,14 +241,14 @@ function FormUsuario() {
             placeholder="Seu nome completo"
             name="nome"
             required
-            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
             value={usuarioForm.nome}
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="usuario" className="font-semibold text-sky-900">
+          <label htmlFor="usuario" className="font-semibold text-sky-900 dark:text-slate-100">
             E-mail
           </label>
           <input
@@ -256,14 +256,14 @@ function FormUsuario() {
             placeholder="email@exemplo.com"
             name="usuario"
             required
-            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
             value={usuarioForm.usuario}
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="senha" className="font-semibold text-sky-900">
+          <label htmlFor="senha" className="font-semibold text-sky-900 dark:text-slate-100">
             Senha
           </label>
           <input
@@ -271,14 +271,14 @@ function FormUsuario() {
             placeholder="Mínimo 8 caracteres"
             name="senha"
             required
-            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
             value={usuarioForm.senha}
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="confirmarSenha" className="font-semibold text-sky-900">
+          <label htmlFor="confirmarSenha" className="font-semibold text-sky-900 dark:text-slate-100">
             Confirmar Senha
           </label>
           <input
@@ -286,21 +286,21 @@ function FormUsuario() {
             placeholder="Repita a senha"
             name="confirmarSenha"
             required
-            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
             value={confirmarSenha}
             onChange={(e: ChangeEvent<HTMLInputElement>) => setConfirmarSenha(e.target.value)}
           />
         </div>
 
         <div className="flex flex-col gap-2">
-          <label htmlFor="foto" className="font-semibold text-sky-900">
+          <label htmlFor="foto" className="font-semibold text-sky-900 dark:text-slate-100">
             URL da Foto (Opcional)
           </label>
           <input
             type="text"
             placeholder="Link da imagem do usuário"
             name="foto"
-            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800"
+            className="border-2 border-slate-300 rounded-xl p-2 focus:outline-none focus:border-sky-800 dark:bg-slate-800 dark:border-slate-600 dark:text-slate-100"
             value={usuarioForm.foto}
             onChange={(e: ChangeEvent<HTMLInputElement>) => atualizarEstado(e)}
           />
@@ -311,14 +311,14 @@ function FormUsuario() {
               <button
                 type="button"
                 onClick={cancelarSelecao}
-                className="w-1/3 rounded-xl border-2 border-slate-400 text-slate-700 font-bold py-3 hover:bg-slate-50 transition-colors"
+                className="w-1/3 rounded-xl border-2 border-slate-400 text-slate-700 font-bold py-3 hover:bg-slate-50 transition-colors dark:text-slate-100 dark:bg-slate-800 dark:border-slate-600 dark:hover:bg-slate-700"
               >
                 Cancelar
               </button>
 
               <button
                 type="submit"
-                className="w-2/3 rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold py-3 flex justify-center transition-colors"
+                className="w-2/3 rounded-xl bg-sky-800 hover:bg-sky-900 text-white font-bold py-3 flex justify-center transition-colors dark:border-2 dark:border-slate-200 dark:text-slate-100 dark:bg-slate-700 dark:hover:bg-slate-600"
               >
                 {isLoading ? (
                   <ClipLoader color="#ffffff" size={24} />
@@ -331,10 +331,10 @@ function FormUsuario() {
             </div>
 
             {id === undefined && (
-              <p className="text-center text-sm text-slate-500">
+              <p className="text-center text-sm text-slate-500 dark:text-slate-100">
                 Já tem uma conta?{" "}
                 <span
-                  className="text-sky-800 hover:underline cursor-pointer"
+                  className="text-sky-700 hover:underline cursor-pointer"
                   onClick={() => navigate("/login")}
                 >
                   Entrar
