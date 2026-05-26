@@ -90,12 +90,14 @@ function Home() {
           <p className="text-2xl md:text-3xl font-medium leading-snug text-white text-center m-2 ">
             Mais que cuidado, uma parceria de vida
           </p>
+          {!podeVerClientes && (
           <a
             href="#formContato"
             className="bg-linear-to-r from-sky-950 via-sky-900 to-sky-800 text-white text-lg font-semibold px-8 py-3 rounded-full hover:-translate-y-0.5 hover:shadow-lg shadow-none transition-all duration-300  dark:from-slate-950 dark:via-slate-900 dark:to-slate-800  "
           >
             Fale com um de nossos corretores
           </a>
+          )}
         </div>
       </section>
 
